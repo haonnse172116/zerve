@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { FaFacebook, FaGoogle } from "react-icons/fa";
 import axios, { AxiosError } from "axios";
+import { useNavigate } from "react-router-dom";
+import api from "../../api";
 export default function RegisterPage() {
   const [phone, setPhone] = useState("");
   const [username, setUsername] = useState("");
@@ -8,7 +10,7 @@ export default function RegisterPage() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
-
+  const navigate = useNavigate();
   const handleRegister = async () => {
     setMessage("");
     if (!phone || !username || !password || !confirmPassword) {
@@ -23,7 +25,7 @@ export default function RegisterPage() {
 
     setLoading(true);
     try {
-      const response = await axios.post("/user/register", {
+      const response = await api.post("/user/register", {
         phoneNumber: phone,
         password,
         name: username,
@@ -49,7 +51,8 @@ export default function RegisterPage() {
         <div className="max-w-screen-md w-full">
           <h1 className="text-3xl font-bold">Đăng ký</h1>
           <p className="mt-2 text-gray-600">
-            Đã có tài khoản? <span className="text-blue-600 font-semibold">Đăng nhập ngay!</span>
+            Đã có tài khoản? <span className="text-blue-600 font-semibold"
+            onClick={() => navigate("/login")} >Đăng nhập ngay!</span>
           </p>
           
           <div className="mt-6">

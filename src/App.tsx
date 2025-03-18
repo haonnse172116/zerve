@@ -14,6 +14,7 @@ import Landing from "./pages/main/LandingPage";
 import ProfilePage from "./pages/user/Profile";
 import DriverManagement from "./pages/admin/DriverManagement";
 import CarQuality from "./pages/admin/CarQuality";
+import Booking from "./pages/main/Booking";
 
 function App() {
     return (
@@ -27,6 +28,7 @@ function App() {
         <Route path="car-detail/:carId" element={<CarDetail />} />
         <Route path="checkout" element={<CheckOut />} />
         <Route path="profile" element={<ProfilePage />} />
+        <Route path="booking/:carId" element={<Booking />} />
         </Route>
 
         {/* Route dành cho admin */}

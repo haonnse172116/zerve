@@ -10,12 +10,12 @@ const api = axios.create({
 });
 
 api.interceptors.request.use((config) => {
-    const token = localStorage.getItem("token"); // Lấy token từ localStorage
+    const token = localStorage.getItem("token");
     if (token) {
-      config.headers.Authorization = `Bearer ${token}`; // Thêm token vào header
+      config.headers.Authorization = `Bearer ${token}`; 
     }
     return config;
   }, (error) => {
-    return Promise.reject(error); // Trả về lỗi nếu có
+    return Promise.reject(error); 
   });
 export default api;

@@ -2,16 +2,18 @@ import { useState } from "react";
 import { FaFacebook, FaGoogle } from "react-icons/fa";
 import api from "../../api";
 import axios from "axios";
-
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../components/context/AuthContext";
+import { Button, message } from "antd";
 export default function LoginPage() {
+  const { login } = useAuth(); 
   const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
-  const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate(); 
 
   const handleLogin = async () => {
-    setMessage("");
     setLoading(true);
 
     try {
@@ -20,23 +22,16 @@ export default function LoginPage() {
         password
       });
 
-      const token = response.data.token;
-      if (token) {
-        if (rememberMe) {
-          localStorage.setItem("token", token); // Ghi nhớ đăng nhập
-        } else {
-          sessionStorage.setItem("token", token); // Chỉ lưu tạm cho phiên đăng nhập
-        }
+      const {token, user} = response.data;
+      if (token && user) {
+        login(user, token); 
+        navigate("/"); 
       }
-
-      setMessage("Đăng nhập thành công!");
-      window.location.href = "/"; // Chuyển hướng đến trang chính
-
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        setMessage(error.response?.data?.message || "Đăng nhập thất bại.");
+        message.error(error.response?.data?.message || "Đăng nhập thất bại.");
       } else {
-        setMessage("Có lỗi xảy ra, vui lòng thử lại.");
+        message.error("Có lỗi xảy ra, vui lòng thử lại.");
       }
   };
 }
@@ -48,7 +43,8 @@ export default function LoginPage() {
         <div className="max-w-screen-md w-full">
           <h1 className="text-3xl font-bold">Đăng nhập</h1>
           <p className="mt-2 text-gray-600">
-            Chưa có tài khoản? <span className="text-blue-600 font-semibold">Đăng ký ngay!</span>
+            Chưa có tài khoản? <span className="text-blue-600 font-semibold"
+            onClick={() => navigate("/register")} >Đăng ký ngay!</span>
           </p>
           
           <div className="mt-6">
