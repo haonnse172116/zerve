@@ -123,7 +123,7 @@ const CarRentalListing = () => {
             {car.pricePerDay.toLocaleString()} <span className="text-gray-600">đ/ngày</span>
           </h3>
           <div className="mt-4">
-            <p className="text-gray-500 text-sm">Địa điểm nhận xe và trả về: {car.pickupLocations.join(" - ")}</p>
+            <p className="text-gray-500 text-sm">Địa điểm nhận xe: {car.pickupLocations.join(" - ")}</p>
           </div>
           <Button
             className="mt-4 w-full bg-blue-600 text-white py-3 rounded-lg font-bold"

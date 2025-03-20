@@ -1,6 +1,8 @@
 import { Link } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
 const Header = () => {
+  const { user, logout, isAuthenticated } = useAuth(); 
   return (
     <header className="bg-white shadow-md rounded-full py-2 px-6 flex justify-between items-center">
       {/* Logo */}
@@ -17,17 +19,22 @@ const Header = () => {
       </nav>
       
       {/* Icons */}
-      <div className="flex items-center space-x-4">
-        <button className="p-2 text-gray-600 hover:text-gray-900">
-          <i className="far fa-comment-alt"></i>
-        </button>
-        <button className="p-2 text-gray-600 hover:text-gray-900">
-          <i className="far fa-bell"></i>
-        </button>
-        <div className="w-8 h-8 rounded-full overflow-hidden border border-gray-300">
-          <img src="/Profile.jpg" alt="User Avatar" className="w-full h-full object-cover" />
-        </div>
-      </div>
+      {isAuthenticated ? (
+          <button
+            onClick={logout} // Gọi hàm logout khi nhấn nút
+            className="w-8 h-8 rounded-full overflow-hidden border border-gray-300 flex items-center justify-center bg-gray-100"
+          >
+            <i className="fa fa-sign-out-alt text-gray-600"></i> {/* Nút đăng xuất */}
+          </button>
+        ) : (
+          <div className="w-8 h-8 rounded-full overflow-hidden border border-gray-300">
+            <img
+              src="/Profile.jpg"
+              alt="User Avatar"
+              className="w-full h-full object-cover"
+            />
+          </div>
+        )}
     </header>
   );
 };

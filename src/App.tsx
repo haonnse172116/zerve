@@ -1,4 +1,4 @@
-import { BrowserRouter as Router,Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router,Routes, Route, useNavigate } from "react-router-dom";
 import CarManagement from "./pages/admin/CarManagement";
 import Dashboard from "./pages/admin/Dashboard";
 import UserLayout from "./pages/main/MainLayout";
@@ -15,8 +15,11 @@ import ProfilePage from "./pages/user/Profile";
 import DriverManagement from "./pages/admin/DriverManagement";
 import CarQuality from "./pages/admin/CarQuality";
 import Booking from "./pages/main/Booking";
+import { useEffect } from "react";
+import RoleRedirect from "../src/components/RoleRedirect"; 
 
 function App() {
+
     return (
       <Router>
       <Routes>
@@ -26,13 +29,13 @@ function App() {
         <Route path="/" element={<Landing />} />
         <Route path="car-list" element={<CarList />} />
         <Route path="car-detail/:carId" element={<CarDetail />} />
-        <Route path="checkout" element={<CheckOut />} />
+        <Route path="checkout/:id" element={<CheckOut />} />
         <Route path="profile" element={<ProfilePage />} />
         <Route path="booking/:carId" element={<Booking />} />
         </Route>
 
         {/* Route dành cho admin */}
-        <Route path="/admin" element={<AdminLayout />}>
+        <Route path="/admin" element={<RoleRedirect><AdminLayout /></RoleRedirect>}>
           <Route path="dashboard" element={<Dashboard />} />
           <Route path="car-management" element={<CarManagement />} />
           <Route path="car-order" element={<CarOrder />} />

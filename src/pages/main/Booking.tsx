@@ -10,8 +10,7 @@ const Booking = () => {
   const { searchData } = useCarSearch();
   const navigate = useNavigate();
 
-  // 🔹 Lấy thông tin user từ localStorage
-  const userRef = useRef(localStorage.getItem("user"));
+  const userRef = useRef(sessionStorage.getItem("user"));
   const user = userRef.current ? JSON.parse(userRef.current) : null;
 
   const [car, setCar] = useState<any>(null);
@@ -82,9 +81,10 @@ const Booking = () => {
         totalPrice,
       };
 
-      await api.post("/booking/create", bookingData);
+      const response = await api.post("/booking/create", bookingData);
+     const { bookingId, amount } = response.data;
       message.success("Đặt xe thành công!");
-      navigate("/checkout");
+      navigate(`/checkout/${bookingId}`, { state: { bookingId, amount } });
     } catch (error) {
       console.error("Lỗi khi đặt xe:", error);
       message.error("Đặt xe thất bại, vui lòng thử lại!");

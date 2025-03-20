@@ -35,7 +35,7 @@ export default function RegisterPage() {
       });
 
       setMessage(response.data.message);
-
+      navigate("/login");
     } catch (error) {
       const axiosError = error as AxiosError<{ message?: string }>;
       setMessage(axiosError.response?.data?.message || "Đăng ký thất bại.");

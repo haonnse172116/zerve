@@ -12,10 +12,10 @@ export default function LoginPage() {
   const [rememberMe, setRememberMe] = useState(false);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate(); 
-
+  const [errorMessage, setErrorMessage] = useState("");
   const handleLogin = async () => {
     setLoading(true);
-
+    setErrorMessage(""); 
     try {
       const response = await api.post("/user/login", { 
         phoneNumber: phone,
@@ -23,15 +23,21 @@ export default function LoginPage() {
       });
 
       const {token, user} = response.data;
+
       if (token && user) {
+        sessionStorage.setItem("token", token);
+        sessionStorage.setItem("role", user.role); 
+        console.log("role:", user.role);
         login(user, token); 
         navigate("/"); 
       }
     } catch (error) {
+      setLoading(false);
       if (axios.isAxiosError(error)) {
-        message.error(error.response?.data?.message || "Đăng nhập thất bại.");
+        const errorMsg = error.response?.data?.message || "Đăng nhập thất bại.";
+        setErrorMessage(errorMsg); // ✅ Cập nhật lỗi
       } else {
-        message.error("Có lỗi xảy ra, vui lòng thử lại.");
+        setErrorMessage("Có lỗi xảy ra, vui lòng thử lại.");
       }
   };
 }
@@ -82,10 +88,16 @@ export default function LoginPage() {
             <a href="#" className="text-blue-600">Quên mật khẩu?</a>
           </div>
           
-          <button className="w-full mt-6 bg-orange-500 text-white py-3 rounded-md hover:bg-orange-600"
-          onClick={handleLogin}
-          disabled={loading}>
-            Đăng nhập
+          {errorMessage && (
+            <p className="text-red-500 text-sm mt-2">{errorMessage}</p>
+          )}
+
+          <button 
+            className="w-full mt-6 bg-orange-500 text-white py-3 rounded-md hover:bg-orange-600"
+            onClick={handleLogin}
+            disabled={loading}
+          >
+            {loading ? "Đang đăng nhập..." : "Đăng nhập"}
           </button>
           
           <p className="text-center mt-6 text-gray-600">hoặc tiếp tục với</p>
