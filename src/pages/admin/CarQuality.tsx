@@ -20,6 +20,7 @@ interface Payment {
     user: {
       personalInfo: {
         name: string;
+        email: string;
       };
       phoneNumber: string;
     };
@@ -104,7 +105,9 @@ export default function PaymentManagement() {
                 {paginatedPayments.map((payment) => (
                   <tr key={payment._id} className="border-t hover:bg-gray-100">
                     <td className="p-3">{payment.bookingId?.user?.personalInfo?.name || "N/A"}</td>
-                    <td className="p-3">{payment.bookingId?.user?.phoneNumber || "N/A"}</td>
+                    <td className="p-3">
+  {payment.bookingId?.user?.phoneNumber ? payment.bookingId.user.phoneNumber : payment.bookingId.user.personalInfo?.email || "N/A"}
+</td>                                     
                     <td className="p-3">
                       {payment.bookingId?.car?.brand} {payment.bookingId?.car?.name} (
                       {payment.bookingId?.car?.licensePlate})
