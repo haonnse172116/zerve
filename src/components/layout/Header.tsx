@@ -35,7 +35,7 @@ const Header = () => {
         ) : (
           <a href="/login" className="w-8 h-8 rounded-full overflow-hidden border border-gray-300">
             <img
-              src="/Profile.jpg"
+              src="/blank-profile-picture.png"
               alt="User Avatar"
               className="w-full h-full object-cover"
             />
