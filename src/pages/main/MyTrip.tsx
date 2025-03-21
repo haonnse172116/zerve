@@ -13,6 +13,8 @@ interface Booking {
   };
   startDate: string;
   endDate: string;
+  startTime: string;
+  endTime: string;
   status: string;
 }
 
@@ -88,6 +90,10 @@ export default function MyTrips() {
                   <p className="text-sm text-gray-600">
                     Ngày thuê: {new Date(booking.startDate).toLocaleDateString()} -{" "}
                     {new Date(booking.endDate).toLocaleDateString()}
+                  </p>
+                  <p className="text-sm text-gray-600">
+                    Thời gian thuê: {booking.startTime} -{" "}
+                    {booking.endTime}
                   </p>
                   <p
                     className={`text-sm font-semibold ${
