@@ -17,6 +17,8 @@ interface Payment {
     _id: string;
     startDate: string;
     endDate: string;
+    endTime: string;
+    startTime: string;
     user: {
       personalInfo: {
         name: string;
@@ -93,7 +95,8 @@ export default function PaymentManagement() {
                   <th className="p-3">Người thuê</th>
                   <th className="p-3">Liên hệ</th>
                   <th className="p-3">Xe thuê</th>
-                  <th className="p-3 text-center">Ngày thuê</th>
+                  <th className="p-3 text-center">Ngày thuê và trả</th>
+                  <th className="p-3 text-center">Thời gian thuê và trả</th>
                   <th className="p-3 text-center">Số tiền</th>
                   <th className="p-3 text-center">Phương thức</th>
                   <th className="p-3 text-center">Trạng thái</th>
@@ -115,6 +118,10 @@ export default function PaymentManagement() {
                     <td className="p-3 text-center">
                       {new Date(payment.bookingId?.startDate).toLocaleDateString()} -{" "}
                       {new Date(payment.bookingId?.endDate).toLocaleDateString()}
+                    </td>
+                    <td className="p-3 text-center">
+                      {payment.bookingId?.startTime} -{" "}
+                      {payment.bookingId?.endTime}
                     </td>
                     <td className="p-3 text-center">{payment.amount.toLocaleString()} VNĐ</td>
                     <td className="p-3 text-center">{payment.paymentMethod}</td>
