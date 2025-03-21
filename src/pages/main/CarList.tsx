@@ -6,8 +6,12 @@ import { BsStar, BsClock } from "react-icons/bs";
 import { FiZap, FiMapPin } from "react-icons/fi";
 import { RiShieldCheckLine } from "react-icons/ri";
 import { useNavigate } from "react-router-dom";
+import { Modal, Button, DatePicker, TimePicker, Select } from "antd";
 import api from "../../api";
 import { CarSearchContext } from "../../components/context/CarSearchContext";
+import dayjs from "dayjs";
+
+const { Option } = Select;
 
 // 🔹 Định nghĩa kiểu dữ liệu cho xe
 interface Car {
@@ -24,7 +28,11 @@ const SearchFilterCarList = () => {
   const [cars, setCars] = useState<Car[]>([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
-  const { searchData } = useContext(CarSearchContext);
+  const { searchData, setSearchData } = useContext(CarSearchContext);
+
+  // 🔥 State cho Modal chỉnh sửa ngày/giờ thuê
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [editedSearchData, setEditedSearchData] = useState(searchData);
 
   // 🔹 Fetch danh sách xe dựa trên searchData từ Context
   useEffect(() => {
@@ -32,11 +40,11 @@ const SearchFilterCarList = () => {
       try {
         setLoading(true);
         const response = await api.get("/car/available", {
-          params: searchData, 
+          params: searchData,
           headers: {
             "Cache-Control": "no-cache",
             Pragma: "no-cache",
-          }
+          },
         });
 
         console.log("Danh sách xe có sẵn:", response.data);
@@ -57,6 +65,18 @@ const SearchFilterCarList = () => {
     car.name.toLowerCase().includes(search.toLowerCase())
   );
 
+  // 🛠 Xử lý mở Modal chỉnh sửa thời gian
+  const handleOpenModal = () => {
+    setEditedSearchData(searchData);
+    setIsModalOpen(true);
+  };
+
+  // 🛠 Xử lý lưu thời gian thuê sau khi chỉnh sửa
+  const handleSaveTime = () => {
+    setSearchData(editedSearchData);
+    setIsModalOpen(false);
+  };
+
   return (
     <div className="w-full min-h-screen p-6 flex flex-col items-center bg-gray-100">
       {/* Thanh tìm kiếm và bộ lọc */}
@@ -68,8 +88,13 @@ const SearchFilterCarList = () => {
           </div>
           <div className="flex items-center gap-2 text-gray-600">
             <FaCalendarAlt />
-            <span>{`${searchData.startTime}, ${searchData.startDate} - ${searchData.endTime}, ${searchData.endDate}`}</span>
+            <span>
+              {`${searchData.startTime}, ${searchData.startDate} - ${searchData.endTime}, ${searchData.endDate}`}
+            </span>
           </div>
+          <Button type="primary" onClick={handleOpenModal}>
+            Chỉnh sửa thời gian
+          </Button>
         </div>
 
         <input
@@ -91,7 +116,10 @@ const SearchFilterCarList = () => {
             { icon: RiShieldCheckLine, label: "Miễn thế chấp" },
             { icon: FaSlidersH, label: "Bộ lọc" },
           ].map(({ icon: Icon, label }, index) => (
-            <button key={index} className="flex items-center gap-2 px-4 py-2 border rounded-full text-gray-700">
+            <button
+              key={index}
+              className="flex items-center gap-2 px-4 py-2 border rounded-full text-gray-700"
+            >
               <Icon /> {label}
             </button>
           ))}
@@ -101,10 +129,15 @@ const SearchFilterCarList = () => {
       {/* Danh sách xe */}
       <div className="w-full max-w-none mt-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {loading ? (
-          <p className="text-center text-gray-600 mt-6">Đang tải danh sách xe...</p>
+          <p className="text-center text-gray-600 mt-6">
+            Đang tải danh sách xe...
+          </p>
         ) : filteredCars.length > 0 ? (
           filteredCars.map((car) => (
-            <div key={car._id} className="bg-white rounded-xl shadow-lg overflow-hidden">
+            <div
+              key={car._id}
+              className="bg-white rounded-xl shadow-lg overflow-hidden"
+            >
               <img
                 src={car.images?.[0]}
                 alt="Car Image"
@@ -126,9 +159,52 @@ const SearchFilterCarList = () => {
             </div>
           ))
         ) : (
-          <p className="text-center text-gray-600 mt-6">Không tìm thấy xe phù hợp.</p>
+          <p className="text-center text-gray-600 mt-6">
+            Không tìm thấy xe phù hợp.
+          </p>
         )}
       </div>
+
+      {/* 🔥 Modal Chỉnh sửa ngày/giờ thuê */}
+      <Modal
+        title="Chỉnh sửa thời gian thuê"
+        visible={isModalOpen}
+        onOk={handleSaveTime}
+        onCancel={() => setIsModalOpen(false)}
+      >
+        <div className="flex flex-col space-y-4">
+          <label>Ngày bắt đầu:</label>
+          <DatePicker
+            value={dayjs(editedSearchData.startDate)}
+            onChange={(date) =>
+              setEditedSearchData({ ...editedSearchData, startDate: date?.format("YYYY-MM-DD") })
+            }
+          />
+          <label>Giờ bắt đầu:</label>
+          <TimePicker
+            value={dayjs(editedSearchData.startTime, "HH:mm")}
+            format="HH:mm"
+            onChange={(time) =>
+              setEditedSearchData({ ...editedSearchData, startTime: time?.format("HH:mm") })
+            }
+          />              
+              <label>Ngày kết thúc:</label>
+          <DatePicker
+            value={dayjs(editedSearchData.endDate)}
+            onChange={(date) =>
+              setEditedSearchData({ ...editedSearchData, endDate: date?.format("YYYY-MM-DD") })
+            }
+          />
+          <label>Giờ kết thúc:</label>
+          <TimePicker
+            value={dayjs(editedSearchData.endTime, "HH:mm")}
+            format="HH:mm"
+            onChange={(time) =>
+              setEditedSearchData({ ...editedSearchData, endTime: time?.format("HH:mm") })
+            }
+          />
+        </div>
+      </Modal>
     </div>
   );
 };
