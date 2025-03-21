@@ -10,7 +10,6 @@ export default function GoogleAuthSuccess() {
   useEffect(() => {
     const token = searchParams.get("token");
     const user = searchParams.get("user");
-
     if (token && user) {
       sessionStorage.setItem("token", token);
       sessionStorage.setItem("role", JSON.parse(user).role);

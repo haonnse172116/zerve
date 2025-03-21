@@ -40,6 +40,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const login = (userData: User, token: string) => {
     sessionStorage.setItem("user", JSON.stringify(userData));
     sessionStorage.setItem("token", token);
+    console.log(user);
+    console.log(token);
     setUser(userData);
     setIsAuthenticated(true);
   };
