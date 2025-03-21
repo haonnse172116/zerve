@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import {ReactApexChart} from "react-apexcharts";
+import Chart from "react-apexcharts";
 import api from "../../api";
 import { ApexOptions } from "apexcharts";
 
@@ -56,7 +56,7 @@ export default function MonthlySalesChart() {
   return (
     <div className="bg-white p-5 rounded-xl shadow">
       <h2 className="text-lg font-bold mb-4">Monthly Sales</h2>
-      <ReactApexChart options={options} series={series} type="bar" height={350} />
+      <Chart options={options} series={series} type="bar" height={350} />
       </div>
   );
 }
