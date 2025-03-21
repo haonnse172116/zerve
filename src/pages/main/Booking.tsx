@@ -114,9 +114,13 @@ const Booking = () => {
             <p className="font-semibold">{user.name}</p>
           </div>
           <div>
-            <p className="text-gray-500 text-sm">SĐT:</p>
-            <p className="font-semibold">{user.phoneNumber}</p>
-          </div>
+  <p className="text-gray-500 text-sm">
+    {user.phoneNumber ? "SĐT:" : "Email:"}
+  </p>
+  <p className="font-semibold">
+    {user.phoneNumber ? user.phoneNumber : user.email}
+  </p>
+</div>
           <div>
             <p className="text-gray-500 text-sm">Bắt đầu:</p>
             <p className="font-semibold">{searchData.startDate} - {searchData.startTime}</p>
