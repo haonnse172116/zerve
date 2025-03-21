@@ -7,7 +7,7 @@ import { MoreDotIcon } from "../../icons";
 import api from "../../api";
 
 export default function MonthlyTarget() {
-  const TARGET = 10_000_000; // 🎯 Mục tiêu doanh thu tháng (10 triệu)
+  const TARGET = 20_000_000; // 🎯 Mục tiêu doanh thu tháng (10 triệu)
   const [totalRevenue, setTotalRevenue] = useState<number>(0);
   const [progress, setProgress] = useState<number>(0);
   const [isOpen, setIsOpen] = useState(false);

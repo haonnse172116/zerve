@@ -124,7 +124,7 @@ export default function CarOrder() {
                       {new Date(booking.createdAt).toLocaleDateString()}
                     </td>
                     <td className="p-3 text-center">
-                      {new Date(booking.startDate).toLocaleDateString()} -  {booking.endTime}
+                      {new Date(booking.startDate).toLocaleDateString()} -  {booking.startTime}
                     </td>
                     <td className="p-3 text-center">{getStatusTag(booking.status)}</td>
                     <td className="p-3 text-center">

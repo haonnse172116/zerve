@@ -7,12 +7,18 @@ const Header = () => {
     <header className="bg-white shadow-md rounded-full py-2 px-6 flex justify-between items-center">
       {/* Logo */}
       <div className="flex items-center space-x-2">
-        <img src="/Logo.png" alt="RentConnect" className="w-20 h-10" />
-      </div>
+  <Link to="/">
+    <img
+      src="/Logo.png"
+      alt="RentConnect"
+      className="h-10 w-auto object-contain cursor-pointer"
+    />
+  </Link>
+</div>
       
       {/* Navigation */}
       <nav className="hidden md:flex space-x-6 text-gray-600 text-sm">
-        <Link to="/" className="hover:text-gray-900">Về RentConnect</Link>
+        <Link to="about" className="hover:text-gray-900">Về RentConnect</Link>
         <a href="#" className="hover:text-gray-900">Trở thành chủ xe</a>
         <Link to="car-list" className="hover:text-gray-900">Danh sách xe</Link>
         {isAuthenticated && <Link to="/my-trips" className="hover:text-gray-900">Chuyến đi của tôi</Link>}
