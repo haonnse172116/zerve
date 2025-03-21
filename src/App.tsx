@@ -20,6 +20,7 @@ import RoleRedirect from "./components/RoleRedirect";
 import MyTrips from "./pages/main/MyTrip";
 import PrivateRoute from "./components/context/PrivateRoute"; // Import Private Route
 import GoogleCallback from "./pages/main/GoogleCallBack";
+import About from "./pages/main/About";
 
 function App() {
   return (
@@ -30,6 +31,8 @@ function App() {
           <Route path="/" element={<Landing />} />
           <Route path="car-list" element={<CarList />} />
           <Route path="car-detail/:carId" element={<CarDetail />} />
+          <Route path="/about" element={<About />} />
+
 
           {/* 🔒 Bảo vệ các route cần đăng nhập */}
           <Route element={<PrivateRoute />}>
