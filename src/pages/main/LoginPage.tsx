@@ -5,6 +5,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../components/context/AuthContext";
 import { Button, message } from "antd";
+
 export default function LoginPage() {
   const { login } = useAuth(); 
   const [phone, setPhone] = useState("");
@@ -13,6 +14,8 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate(); 
   const [errorMessage, setErrorMessage] = useState("");
+
+  // 🔹 Xử lý đăng nhập bằng số điện thoại
   const handleLogin = async () => {
     setLoading(true);
     setErrorMessage(""); 
@@ -39,12 +42,20 @@ export default function LoginPage() {
       setLoading(false);
       if (axios.isAxiosError(error)) {
         const errorMsg = error.response?.data?.message || "Đăng nhập thất bại.";
-        setErrorMessage(errorMsg); // ✅ Cập nhật lỗi
+        setErrorMessage(errorMsg); 
       } else {
         setErrorMessage("Có lỗi xảy ra, vui lòng thử lại.");
       }
+    } finally {
+      setLoading(false);
+    }
   };
-}
+
+  // 🔹 Xử lý đăng nhập bằng Google
+  const handleGoogleLogin = () => {
+    window.location.href = 'https://backend-rentalcar.onrender.com/user/google'; 
+  };
+
   return (
     <div className="flex h-screen">
       {/* Left Side: Login Form */}
@@ -53,7 +64,7 @@ export default function LoginPage() {
         <div className="max-w-screen-md w-full">
           <h1 className="text-3xl font-bold">Đăng nhập</h1>
           <p className="mt-2 text-gray-600">
-            Chưa có tài khoản? <span className="text-blue-600 font-semibold"
+            Chưa có tài khoản? <span className="text-blue-600 font-semibold cursor-pointer"
             onClick={() => navigate("/register")} >Đăng ký ngay!</span>
           </p>
           
@@ -107,8 +118,8 @@ export default function LoginPage() {
           <p className="text-center mt-6 text-gray-600">hoặc tiếp tục với</p>
           
           <div className="flex justify-center mt-4 space-x-4">
-            <FaFacebook className="text-blue-600 text-2xl cursor-pointer" />
-            <FaGoogle className="text-red-500 text-2xl cursor-pointer" />
+            {/* <FaFacebook className="text-blue-600 text-2xl cursor-pointer" /> */}
+            <FaGoogle className="text-red-500 text-2xl cursor-pointer" onClick={handleGoogleLogin} />
           </div>
         </div>
       </div>
