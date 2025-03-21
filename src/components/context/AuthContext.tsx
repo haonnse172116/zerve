@@ -24,6 +24,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [token, setToken] = useState<String | null>(null);
 
   // 🛠 Kiểm tra Local Storage khi ứng dụng load
   useEffect(() => {
@@ -43,6 +44,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     console.log(user);
     console.log(token);
     setUser(userData);
+    setToken(token);
     setIsAuthenticated(true);
   };
 

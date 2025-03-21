@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useAuth } from "../../components/context/AuthContext";
-
+import {jwtDecode} from "jwt-decode"; 
 export default function GoogleAuthSuccess() {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
@@ -9,13 +9,14 @@ export default function GoogleAuthSuccess() {
 
   useEffect(() => {
     const token = searchParams.get("token");
-    const user = searchParams.get("user");
-    if (token && user) {
-      sessionStorage.setItem("token", token);
-      sessionStorage.setItem("role", JSON.parse(user).role);
-      login(JSON.parse(user), token);
+    if (token) {
+        const decodedUser = jwtDecode(token);
+        console.log("Decoded User:", decodedUser);
 
-      if (JSON.parse(user).role === "admin") {
+        // 🔹 Lưu token & user vào sessionStorage
+        sessionStorage.setItem("token", token);
+        sessionStorage.setItem("user", JSON.stringify(decodedUser));
+      if (decodedUser.role === "admin") {
         navigate("/admin/dashboard");
       } else {
         navigate("/");
