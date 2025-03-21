@@ -16,6 +16,7 @@ interface Booking {
     user: {
         personalInfo: {
             name: string;
+            email: string;
         };
         phoneNumber: string;
     };
@@ -106,8 +107,9 @@ export default function CarOrder() {
                                 {paginatedBookings.map((booking) => (
                                     <tr key={booking._id} className="border-t hover:bg-gray-100">
                                         <td className="p-3">{booking.user.personalInfo.name}</td>
-                                        <td className="p-3">{booking.user.phoneNumber}</td>
-                                        <td className="p-3 truncate">
+                                        <td className="p-3">
+  {booking.user.phoneNumber ? booking.user.phoneNumber : booking.user.personalInfo?.email}
+</td>                                        <td className="p-3 truncate">
                                             {booking.car.brand} {booking.car.name}
                                         </td>
                                         <td className="p-3 text-center">
