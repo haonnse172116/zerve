@@ -105,25 +105,6 @@ const SearchFilterCarList = () => {
           onChange={(e) => setSearch(e.target.value)}
         />
 
-        <div className="flex flex-wrap justify-center gap-3 mt-4">
-          {[
-            { icon: IoCarOutline, label: "Loại xe" },
-            { icon: TbWorld, label: "Hãng xe" },
-            { icon: BsStar, label: "Chủ xe 5 sao" },
-            { icon: FiZap, label: "Đặt xe nhanh" },
-            { icon: FiMapPin, label: "Giao nhận xe tận nơi" },
-            { icon: BsClock, label: "Thuê giờ" },
-            { icon: RiShieldCheckLine, label: "Miễn thế chấp" },
-            { icon: FaSlidersH, label: "Bộ lọc" },
-          ].map(({ icon: Icon, label }, index) => (
-            <button
-              key={index}
-              className="flex items-center gap-2 px-4 py-2 border rounded-full text-gray-700"
-            >
-              <Icon /> {label}
-            </button>
-          ))}
-        </div>
       </div>
 
       {/* Danh sách xe */}
