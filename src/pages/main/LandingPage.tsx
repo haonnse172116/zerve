@@ -4,11 +4,23 @@ import axios from "axios";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { useCarSearch } from "../../components/context/CarSearchContext";
-
+import api from "../../api";
+import { FaMapMarkerAlt } from "react-icons/fa";
+import { IoMdPricetag } from "react-icons/io";
+import { AiFillStar } from "react-icons/ai";
+interface Car {
+    _id: string;
+    name: string;
+    location: string;
+    pricePerDay: number;
+    pricePerHour: number;
+    images: string[];
+  }
+  
 const Landing = () => {
     const navigate = useNavigate();
     const { searchData, setSearchData } = useCarSearch();
-
+    const [cars, setCars] = useState<Car[]>([]);
     const [showDateModal, setShowDateModal] = useState(false);
     const [isStartDate, setIsStartDate] = useState(true);
     const [suggestions, setSuggestions] = useState([]);
@@ -30,7 +42,27 @@ const Landing = () => {
 
     // 🔹 Xử lý chọn địa điểm
 
-
+    useEffect(() => {
+        const fetchCars = async () => {
+          try {
+            const response = await api.get("/car/available", {
+              params: searchData,
+              headers: {
+                "Cache-Control": "no-cache",
+                Pragma: "no-cache",
+              },
+            });
+    
+            console.log("Danh sách xe có sẵn:", response.data);
+            setCars(response.data.slice(0,8));
+          } catch (error) {
+            console.error("Lỗi khi tìm xe:", error);
+            alert("Đã xảy ra lỗi khi tìm kiếm xe!");
+          } 
+        };
+    
+        fetchCars();
+      }, [searchData]);
     const handleOpenDateModal = (isStart: boolean) => {
         setIsStartDate(isStart);
         setShowDateModal(true);
@@ -155,6 +187,31 @@ const Landing = () => {
             {/* Form Section */}
             <section className="w-full max-w-2xl mt-6">
                 {renderContent()}
+            </section>
+            <section className="w-full max-w-6xl mt-10">
+                <h2 className="text-2xl font-bold mb-6 text-center">Chọn xe cho hành trình của bạn</h2>
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                    {cars.map((car) => (
+                        <div
+                            key={car._id}
+                            onClick={() => navigate(`/car-detail/${car._id}`)}
+                            className="bg-white rounded-xl shadow-lg overflow-hidden cursor-pointer transition-transform transform hover:scale-105"
+                        >
+                            <img src={car.images?.[0]} alt="Car" className="w-full h-48 object-cover" />
+                            <div className="p-4">
+                                <h3 className="text-lg font-semibold">{car.name}</h3>
+                                <p className="text-gray-500 text-sm flex items-center">
+                                    <FaMapMarkerAlt className="mr-1 text-red-500" /> {car.location}
+                                </p>
+                                <div className="mt-2 flex justify-between items-center">
+                                    <span className="text-red-500 font-semibold flex items-center">
+                                        <IoMdPricetag className="mr-1" /> {car.pricePerDay.toLocaleString()}đ/ngày
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    ))}
+                </div>
             </section>
         </div>
     );
