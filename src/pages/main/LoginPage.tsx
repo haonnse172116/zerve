@@ -52,37 +52,8 @@ export default function LoginPage() {
   };
 
   // 🔹 Xử lý đăng nhập bằng Google
-  const handleGoogleLogin = async () => {
-    // 🔹 Mở cửa sổ popup để login với Google
-    const googleLoginUrl = "https://backend-rentalcar.onrender.com/user/google";
-    const newWindow = window.open(googleLoginUrl, "_blank", "width=500,height=600");
-  
-    // 🔥 Kiểm tra khi user đóng popup
-    const checkWindow = setInterval(async () => {
-      if (newWindow?.closed) {
-        clearInterval(checkWindow);
-  
-        try {
-          // 🔥 Fetch token từ backend sau khi login
-          const response = await api.get("/user/google/callback");
-          const { token, user } = response.data;
-  
-          if (token && user) {
-            sessionStorage.setItem("token", token);
-            sessionStorage.setItem("role", user.role);
-            login(user, token);
-            
-            if (user.role === "admin") {
-              navigate("/admin/dashboard");
-            } else {
-              navigate("/");
-            }
-          }
-        } catch (error) {
-          console.error("Lỗi khi lấy token Google:", error);
-        }
-      }
-    }, 1000);
+  const handleGoogleLogin = () => {
+    window.location.href = "https://backend-rentalcar.onrender.com/user/google";
   };
   return (
     <div className="flex h-screen">
