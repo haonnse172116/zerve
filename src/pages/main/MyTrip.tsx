@@ -48,7 +48,7 @@ export default function MyTrips() {
       message.success("Trả xe thành công!");
       setBookings((prev) =>
         prev.map((b) =>
-          b._id === selectedBookingId ? { ...b, status: "Completed" } : b
+          b._id === selectedBookingId ? { ...b, status: "Pending Confirmation" } : b
         )
       );
     } catch (error) {
@@ -95,6 +95,8 @@ export default function MyTrips() {
                         ? "text-green-600"
                         : booking.status === "Confirmed"
                         ? "text-blue-600"
+                        : booking.status === "Pending Confirmation"
+                        ? "text-yellow-600"
                         : "text-gray-600"
                     }`}
                   >
