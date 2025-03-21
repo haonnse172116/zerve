@@ -19,6 +19,7 @@ import Booking from "./pages/main/Booking";
 import RoleRedirect from "./components/RoleRedirect";
 import MyTrips from "./pages/main/MyTrip";
 import PrivateRoute from "./components/context/PrivateRoute"; // Import Private Route
+import GoogleCallback from "./pages/main/GoogleCallBack";
 
 function App() {
   return (
@@ -52,7 +53,8 @@ function App() {
         <Route element={<LoginRegisterLayout />}>
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
-        </Route>
+          <Route path="/google/callback" element={<GoogleCallback />} />
+          </Route>
       </Routes>
     </Router>
   );
