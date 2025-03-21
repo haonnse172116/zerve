@@ -140,7 +140,7 @@ export default function CarOrder() {
                           Xác nhận trả xe
                         </Button>
                       )}
-                      <Dropdown
+                      {/* <Dropdown
                         overlay={
                           <Menu>
                             <Menu.Item key="edit" icon={<FiEdit />}>
@@ -154,7 +154,7 @@ export default function CarOrder() {
                         trigger={["click"]}
                       >
                         <FiMoreVertical className="cursor-pointer ml-2" />
-                      </Dropdown>
+                      </Dropdown> */}
                     </td>
                   </tr>
                 ))}
