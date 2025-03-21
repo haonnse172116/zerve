@@ -56,7 +56,7 @@ export default function LoginPage() {
     try {
       const res = await fetch("https://backend-rentalcar.onrender.com/user/google", {
         method: "GET",
-        credentials: "include", // Đảm bảo gửi cookie/session nếu có
+        // credentials: "include", // Đảm bảo gửi cookie/session nếu có
       });
   
       if (!res.ok) throw new Error("Đăng nhập thất bại");
