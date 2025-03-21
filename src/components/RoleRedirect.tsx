@@ -10,7 +10,6 @@ const RoleRedirect = ({ children }: { children: React.ReactNode }) => {
     if (role !== "admin") {
       navigate("/");  // Hoặc bạn có thể redirect đến trang login, tùy nhu cầu
     }
-    else navigate('/admin/dashboard')
   }, [role, navigate]);
 
   return <>{children}</>;

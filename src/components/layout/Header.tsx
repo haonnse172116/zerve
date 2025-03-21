@@ -12,28 +12,28 @@ const Header = () => {
       
       {/* Navigation */}
       <nav className="hidden md:flex space-x-6 text-gray-600 text-sm">
-        <a href="#" className="hover:text-gray-900">Về RentConnect</a>
+        <Link to="/" className="hover:text-gray-900">Về RentConnect</Link>
         <a href="#" className="hover:text-gray-900">Trở thành chủ xe</a>
         <Link to="car-list" className="hover:text-gray-900">Danh sách xe</Link>
-        <a href="#" className="hover:text-gray-900">Chuyến đi của tôi</a>
+        {isAuthenticated && <Link to="/my-trips" className="hover:text-gray-900">Chuyến đi của tôi</Link>}
       </nav>
       
       {/* Icons */}
       {isAuthenticated ? (
           <button
-            onClick={logout} // Gọi hàm logout khi nhấn nút
+            onClick={logout}
             className="w-8 h-8 rounded-full overflow-hidden border border-gray-300 flex items-center justify-center bg-gray-100"
           >
             <i className="fa fa-sign-out-alt text-gray-600"></i> {/* Nút đăng xuất */}
           </button>
         ) : (
-          <div className="w-8 h-8 rounded-full overflow-hidden border border-gray-300">
+          <a href="/login" className="w-8 h-8 rounded-full overflow-hidden border border-gray-300">
             <img
               src="/Profile.jpg"
               alt="User Avatar"
               className="w-full h-full object-cover"
             />
-          </div>
+          </a>
         )}
     </header>
   );

@@ -1,37 +1,80 @@
-import { useState } from "react";
-import { Dropdown, Menu, message, Pagination } from 'antd';
-import { FiEdit, FiTrash, FiSearch, FiMoreVertical } from 'react-icons/fi';
-import { Card, CardContent } from '../../components/card/card';
+import { useState, useEffect } from "react";
+import { Dropdown, Menu, message, Pagination } from "antd";
+import { FiEdit, FiTrash, FiSearch, FiMoreVertical } from "react-icons/fi";
+import { Card, CardContent } from "../../components/card/card";
+import { Tag } from "antd";
+import api from "../../api";
 
-const handleMenuClick = (e) => {
+// Xử lý sự kiện menu
+const handleMenuClick = (e: any) => {
     message.info(`Click on menu item: ${e.key}`);
 };
 
-const cars = Array(6).fill({
-    name: "Cao Phương Anh",
-    info: "0948392019",
-    car: "Hyundai I10H SEDAN",
-    dateOrder: "Oct 1, 2025",
-    pickupDate: "Oct 4, 2025",
-    Status: "Đang thuê",
-    dateCarBack: "Oct 22, 2025",
-});
-
+// Định nghĩa kiểu dữ liệu cho đơn đặt xe
+interface Booking {
+    _id: string;
+    user: {
+        personalInfo: {
+            name: string;
+        };
+        phoneNumber: string;
+    };
+    car: {
+        name: string;
+        brand: string;
+        model: string;
+    };
+    startDate: string;
+    startTime: string;
+    endDate: string;
+    endTime: string;
+    createdAt: string;
+    status: string; // Trạng thái đơn đặt xe (Pending, Confirmed, Completed)
+}
 
 export default function CarOrder() {
-    const [currentPage, setCurrentPage] = useState(1);
+    const [bookings, setBookings] = useState<Booking[]>([]); // Dữ liệu booking từ API
+    const [currentPage, setCurrentPage] = useState<number>(1);
     const pageSize = 5;
 
-    // Get paginated data
-    const orderCars = cars.slice((currentPage - 1) * pageSize, currentPage * pageSize);
+    // 🛠 Gọi API để lấy danh sách đơn đặt xe
+    useEffect(() => {
+        const fetchBookings = async () => {
+            try {
+                const response = await api.get<Booking[]>("/booking/getAll");
+                setBookings(response.data);
+            } catch (error) {
+                console.error("Lỗi khi lấy danh sách đơn đặt xe:", error);
+                message.error("Không thể tải danh sách đơn đặt xe.");
+            }
+        };
+        fetchBookings();
+    }, []);
+
+    // Lấy dữ liệu phân trang
+    const paginatedBookings = bookings.slice((currentPage - 1) * pageSize, currentPage * pageSize);
+
+    // Xử lý trạng thái hiển thị dựa trên status
+    const getStatusTag = (status: string) => {
+        switch (status) {
+            case "Pending":
+                return <Tag color="orange">Chờ xác nhận</Tag>;
+            case "Confirmed":
+                return <Tag color="blue">Đã xác nhận</Tag>;
+            case "Completed":
+                return <Tag color="green">Hoàn thành</Tag>;
+            default:
+                return <Tag color="red">Không xác định</Tag>;
+        }
+    };
+
     return (
         <div className="flex min-h-screen bg-gray-100">
-
-            {/* Main Content */}
+            {/* Nội dung chính */}
             <div className="flex-1 p-6">
                 <h1 className="text-2xl font-bold">Quản lí đơn đặt xe</h1>
 
-                {/* Search Bar */}
+                {/* Thanh tìm kiếm */}
                 <div className="mt-4 flex items-center space-x-2">
                     <div className="relative w-80">
                         <FiSearch className="absolute left-3 top-3 text-gray-500" />
@@ -43,7 +86,7 @@ export default function CarOrder() {
                     </div>
                 </div>
 
-                {/* Car Table */}
+                {/* Bảng danh sách đơn đặt xe */}
                 <Card className="mt-6">
                     <CardContent>
                         <table className="w-full border-collapse">
@@ -60,15 +103,25 @@ export default function CarOrder() {
                                 </tr>
                             </thead>
                             <tbody>
-                                {orderCars.map((car, index) => (
-                                    <tr key={index} className="border-t hover:bg-gray-100">
-                                        <td className="p-3">{car.name}</td>
-                                        <td className="p-3">{car.info}</td>
-                                        <td className="p-3 truncate">{car.car}</td>
-                                        <td className="p-3 text-center">{car.dateOrder}</td>
-                                        <td className="p-3 text-center">{car.pickupDate}</td>
-                                        <td className="p-3 text-center">{car.Status}</td>
-                                        <td className="p-3 text-center">{car.dateCarBack}</td>
+                                {paginatedBookings.map((booking) => (
+                                    <tr key={booking._id} className="border-t hover:bg-gray-100">
+                                        <td className="p-3">{booking.user.personalInfo.name}</td>
+                                        <td className="p-3">{booking.user.phoneNumber}</td>
+                                        <td className="p-3 truncate">
+                                            {booking.car.brand} {booking.car.name}
+                                        </td>
+                                        <td className="p-3 text-center">
+                                            {new Date(booking.createdAt).toLocaleDateString()}
+                                        </td>
+                                        <td className="p-3 text-center">
+                                            {new Date(booking.startDate).toLocaleDateString()} - {booking.startTime}
+                                        </td>
+                                        <td className="p-3 text-center">
+                                            {getStatusTag(booking.status)}
+                                        </td>
+                                        <td className="p-3 text-center">
+                                            {new Date(booking.endDate).toLocaleDateString()} - {booking.endTime}
+                                        </td>
                                         <td className="p-3 text-center">
                                             <Dropdown
                                                 overlay={
@@ -86,18 +139,17 @@ export default function CarOrder() {
                                 ))}
                             </tbody>
                         </table>
-
                     </CardContent>
                 </Card>
 
+                {/* Phân trang */}
                 <Pagination
                     current={currentPage}
-                    total={cars.length}
+                    total={bookings.length}
                     pageSize={pageSize}
                     onChange={(page) => setCurrentPage(page)}
                     className="mt-4 flex justify-center"
                 />
-
             </div>
         </div>
     );

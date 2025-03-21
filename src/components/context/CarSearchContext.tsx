@@ -26,7 +26,7 @@ export const CarSearchProvider = ({ children }: { children: ReactNode }) => {
     startDate: new Date().toISOString().split("T")[0], // Ngày hiện tại
     endDate: new Date().toISOString().split("T")[0], // Ngày hiện tại
     startTime: "08:00",
-    endTime: "12:00",
+    endTime: "10:00",
   });
 
   return (

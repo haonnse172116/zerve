@@ -1,35 +1,55 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button, Dropdown, Menu, message, Pagination } from "antd";
 import { FiEdit, FiTrash, FiSearch, FiMoreVertical } from "react-icons/fi";
 import { Card, CardContent } from "../../components/card/card";
+import api from "../../api";
 
-const handleMenuClick = (e) => {
+// Xử lý sự kiện menu
+const handleMenuClick = (e: any) => {
     message.info(`Click on menu item: ${e.key}`);
 };
 
-const cars = Array(7).fill({
-    name: "Hyundai I10H SEDAN",
-    location: "Quận Bình Thạnh, TP. Hồ Chí Minh",
-    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-    price: "600K/1D",
-    image: "/Car.jpg",
-    updatedAt: "Oct 22, 2024",
-});
+// Định nghĩa kiểu dữ liệu cho xe
+interface Car {
+    _id: string;
+    name: string;
+    location: string;
+    description: string;
+    pricePerDay: number;
+    licensePlate: string;
+    images: string[];
+    updatedAt: string;
+}
 
 export default function CarManagement() {
-    const [currentPage, setCurrentPage] = useState(1);
+    const [cars, setCars] = useState<Car[]>([]);  // Dữ liệu xe từ API
+    const [currentPage, setCurrentPage] = useState<number>(1);
     const pageSize = 5;
 
-    // Get paginated data
+    // 🛠 Gọi API để lấy danh sách xe
+    useEffect(() => {
+        const fetchCars = async () => {
+            try {
+                const response = await api.get<Car[]>("/car/get-all");
+                setCars(response.data);
+            } catch (error) {
+                console.error("Lỗi khi lấy danh sách xe:", error);
+                message.error("Không thể tải danh sách xe.");
+            }
+        };
+        fetchCars();
+    }, []);
+
+    // Lấy dữ liệu phân trang
     const paginatedCars = cars.slice((currentPage - 1) * pageSize, currentPage * pageSize);
 
     return (
         <div className="flex min-h-screen bg-gray-100">
-            {/* Main Content */}
+            {/* Nội dung chính */}
             <div className="flex-1 p-6">
                 <h1 className="text-2xl font-bold">Quản lí xe</h1>
 
-                {/* Search Bar */}
+                {/* Thanh tìm kiếm */}
                 <div className="mt-4 flex items-center space-x-2">
                     <div className="relative w-80">
                         <FiSearch className="absolute left-3 top-3 text-gray-500" />
@@ -42,7 +62,7 @@ export default function CarManagement() {
                     <Button className="bg-red-500 text-white px-4 py-2 rounded-lg">Thêm xe</Button>
                 </div>
 
-                {/* Car Table */}
+                {/* Bảng hiển thị danh sách xe */}
                 <Card className="mt-6">
                     <CardContent>
                         <table className="w-full border-collapse">
@@ -52,22 +72,24 @@ export default function CarManagement() {
                                     <th className="p-3 text-left">Địa chỉ</th>
                                     <th className="p-3 text-left">Mô tả</th>
                                     <th className="p-3 text-left">Giá</th>
+                                    <th className="p-3 text-left">Biển số xe</th>
                                     <th className="p-3 text-left">Ảnh</th>
                                     <th className="p-3 text-left">Cập nhật lần cuối</th>
                                     <th className="p-3 text-left"></th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {paginatedCars.map((car, index) => (
-                                    <tr key={index} className="border-t hover:bg-gray-100">
+                                {paginatedCars.map((car) => (
+                                    <tr key={car._id} className="border-t hover:bg-gray-100">
                                         <td className="p-3">{car.name}</td>
                                         <td className="p-3">{car.location}</td>
                                         <td className="p-3 truncate w-40">{car.description}</td>
-                                        <td className="p-3">{car.price}</td>
+                                        <td className="p-3">{car.pricePerDay.toLocaleString()} VNĐ/ngày</td>
+                                        <td className="p-3">{car.licensePlate}</td>
                                         <td className="p-3">
-                                            <img src={car.image} alt="Car" className="w-8 h-8 rounded-full" />
+                                            <img src={car.images[0] || "/default-car.jpg"} alt="Car" className="w-8 h-8 rounded-full" />
                                         </td>
-                                        <td className="p-3">{car.updatedAt}</td>
+                                        <td className="p-3">{new Date(car.updatedAt).toLocaleDateString()}</td>
                                         <td className="p-3 relative">
                                             <Dropdown
                                                 overlay={
@@ -88,7 +110,7 @@ export default function CarManagement() {
                     </CardContent>
                 </Card>
 
-                {/* Pagination Component */}
+                {/* Phân trang */}
                 <Pagination
                     current={currentPage}
                     total={cars.length}

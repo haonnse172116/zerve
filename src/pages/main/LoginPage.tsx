@@ -29,7 +29,11 @@ export default function LoginPage() {
         sessionStorage.setItem("role", user.role); 
         console.log("role:", user.role);
         login(user, token); 
-        navigate("/"); 
+        if (user.role === "admin") {
+          navigate("/admin/dashboard"); // Chuyển hướng tới trang Dashboard của admin
+      } else {
+          navigate("/"); // Chuyển hướng trang chủ với role khác
+      }
       }
     } catch (error) {
       setLoading(false);

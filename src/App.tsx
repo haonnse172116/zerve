@@ -1,4 +1,5 @@
-import { BrowserRouter as Router,Routes, Route, useNavigate } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { useEffect } from "react";
 import CarManagement from "./pages/admin/CarManagement";
 import Dashboard from "./pages/admin/Dashboard";
 import UserLayout from "./pages/main/MainLayout";
@@ -15,42 +16,46 @@ import ProfilePage from "./pages/user/Profile";
 import DriverManagement from "./pages/admin/DriverManagement";
 import CarQuality from "./pages/admin/CarQuality";
 import Booking from "./pages/main/Booking";
-import { useEffect } from "react";
-import RoleRedirect from "../src/components/RoleRedirect"; 
+import RoleRedirect from "./components/RoleRedirect";
+import MyTrips from "./pages/main/MyTrip";
+import PrivateRoute from "./components/context/PrivateRoute"; // Import Private Route
 
 function App() {
-
-    return (
-      <Router>
+  return (
+    <Router>
       <Routes>
         {/* Route dành cho người dùng */}
         <Route element={<UserLayout />}>
-        {/* <Route path="/" element={<LandingPage />} /> */}
-        <Route path="/" element={<Landing />} />
-        <Route path="car-list" element={<CarList />} />
-        <Route path="car-detail/:carId" element={<CarDetail />} />
-        <Route path="checkout/:id" element={<CheckOut />} />
-        <Route path="profile" element={<ProfilePage />} />
-        <Route path="booking/:carId" element={<Booking />} />
+          <Route path="/" element={<Landing />} />
+          <Route path="car-list" element={<CarList />} />
+          <Route path="car-detail/:carId" element={<CarDetail />} />
+
+          {/* 🔒 Bảo vệ các route cần đăng nhập */}
+          <Route element={<PrivateRoute />}>
+            <Route path="checkout/:id" element={<CheckOut />} />
+            <Route path="profile" element={<ProfilePage />} />
+            <Route path="booking/:carId" element={<Booking />} />
+            <Route path="my-trips" element={<MyTrips />} />
+          </Route>
         </Route>
 
-        {/* Route dành cho admin */}
+        {/* Route dành cho admin (🔒 Chỉ admin được truy cập) */}
         <Route path="/admin" element={<RoleRedirect><AdminLayout /></RoleRedirect>}>
           <Route path="dashboard" element={<Dashboard />} />
           <Route path="car-management" element={<CarManagement />} />
           <Route path="car-order" element={<CarOrder />} />
           <Route path="driver-management" element={<DriverManagement />} />
-          <Route path="car-quality" element={<CarQuality />} />
+          <Route path="car-payment" element={<CarQuality />} />
         </Route>
 
+        {/* Route đăng nhập & đăng ký */}
         <Route element={<LoginRegisterLayout />}>
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
         </Route>
-
       </Routes>
     </Router>
-    );
+  );
 }
 
 export default App;

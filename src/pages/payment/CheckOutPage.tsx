@@ -71,7 +71,7 @@ const PaymentSelection = () => {
           <h3 className="text-lg font-medium">Mã thanh toán</h3>
           <p className="text-xl font-semibold text-gray-800">Tổng giá trị: <span className="text-orange-600">{validTotalPrice.toLocaleString()}</span></p>
           <div className="flex justify-center my-4">
-            <img src="/haonqrcode.png" alt="QR Code" className="w-64 h-64" />
+            <img src="https://img.vietqr.io/image/STB-070125660841-qr_only.png" alt="QR Code" className="w-64 h-64" />
           </div>
           <p className="text-sm text-gray-600">Nội dung: <span className="font-semibold">THUEXETHEOGIO</span></p>
           <p className="text-sm text-gray-600">STK: <span className="font-semibold">070125660841</span></p>

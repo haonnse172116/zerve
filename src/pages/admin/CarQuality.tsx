@@ -1,111 +1,169 @@
-import { useState } from "react";
-import { Button, Dropdown, Menu, message, Pagination } from "antd";
+import { useState, useEffect } from "react";
+import { Dropdown, Menu, message, Pagination, Select } from "antd";
 import { FiEdit, FiTrash, FiSearch, FiMoreVertical } from "react-icons/fi";
 import { Card, CardContent } from "../../components/card/card";
+import api from "../../api";
 
-const handleMenuClick = (e) => {
-    message.info(`Click on menu item: ${e.key}`);
-};
+const { Option } = Select;
 
-const cars = Array(7).fill({
-    name: "Hyundai I10H SEDAN",
-    distane: "2000km",
-    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-    price: "600K/1D",
-    image: "/Car.jpg",
-    vehiclePaper: "/giaytoxe.jpeg",
-    updatedAt: "Oct 22, 2024",
-});
+// Định nghĩa kiểu dữ liệu cho thanh toán
+interface Payment {
+  _id: string;
+  amount: number;
+  paymentMethod: string;
+  status: string;
+  createdAt: string;
+  bookingId: {
+    _id: string;
+    startDate: string;
+    endDate: string;
+    user: {
+      personalInfo: {
+        name: string;
+      };
+      phoneNumber: string;
+    };
+    car: {
+      name: string;
+      brand: string;
+      licensePlate: string;
+    };
+  };
+}
 
-export default function CarQuality() {
-    const [currentPage, setCurrentPage] = useState(1);
-    const pageSize = 5;
+const paymentStatuses = ["Pending", "Paid", "Failed"];
 
-    // Get paginated data
-    const paginatedCars = cars.slice((currentPage - 1) * pageSize, currentPage * pageSize);
+export default function PaymentManagement() {
+  const [payments, setPayments] = useState<Payment[]>([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const pageSize = 5;
 
-    return (
-        <div className="flex min-h-screen bg-gray-100">
-            {/* Main Content */}
-            <div className="flex-1 p-6">
-                <h1 className="text-2xl font-bold">Quản lí tình trạng xe</h1>
+  useEffect(() => {
+    const fetchPayments = async () => {
+      try {
+        const response = await api.get<Payment[]>("/payment/get-all");
+        setPayments(response.data);
+      } catch (error) {
+        console.error("Lỗi khi lấy danh sách thanh toán:", error);
+        message.error("Không thể tải danh sách thanh toán.");
+      }
+    };
+    fetchPayments();
+  }, []);
 
-                {/* Search Bar */}
-                <div className="mt-4 flex items-center space-x-2">
-                    <div className="relative w-80">
-                        <FiSearch className="absolute left-3 top-3 text-gray-500" />
-                        <input
-                            type="text"
-                            placeholder="Tìm kiếm"
-                            className="pl-10 p-2 border rounded-md w-full"
-                        />
-                    </div>
-                    <Button className="bg-red-500 text-white px-4 py-2 rounded-lg">Thêm xe</Button>
-                </div>
+  const paginatedPayments = payments.slice((currentPage - 1) * pageSize, currentPage * pageSize);
 
-                {/* Car Table */}
-                <Card className="mt-6">
-                    <CardContent>
-                        <table className="w-full border-collapse table-fixed">
-                            <thead>
-                                <tr className="bg-gray-200">
-                                    <th className="p-3 text-center">Tên xe</th>
-                                    <th className="p-3 text-center">Số km đã đi</th>
-                                    <th className="p-3 text-center">Mô tả</th>
-                                    <th className="p-3 text-center">Giá</th>
-                                    <th className="p-3 text-center">Ảnh</th>
-                                    <th className="p-3 text-center">Giấy tờ xe</th>
-                                    <th className="p-3 text-center">Bảo dưỡng lần cuối</th>
-                                    <th className="p-3 text-center"></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {paginatedCars.map((car, index) => (
-                                    <tr key={index} className="border-t hover:bg-gray-100">
-                                        <td className="p-3 text-center">{car.name}</td>
-                                        <td className="p-3 text-center">{car.distane}</td>
-                                        <td className="p-3 text-center truncate w-40">{car.description}</td>
-                                        <td className="p-3 text-center">{car.price}</td>
-                                        <td className="p-3 text-center">
-                                            <div className="flex justify-center items-center">
-                                                <img src={car.image} alt="Car" className="w-12 h-12 rounded-md" />
-                                            </div>
-                                        </td>
-                                        <td className="p-3 text-center">
-                                            <div className="flex justify-center items-center">
-                                                <img src={car.vehiclePaper} alt="CarPaper" className="w-12 h-12 rounded-md" />
-                                            </div>
-                                        </td>
-                                        <td className="p-3 text-center">{car.updatedAt}</td>
-                                        <td className="p-3 text-center relative">
-                                            <Dropdown
-                                                overlay={
-                                                    <Menu onClick={handleMenuClick}>
-                                                        <Menu.Item key="edit" icon={<FiEdit />}>Cập nhật</Menu.Item>
-                                                        <Menu.Item key="delete" icon={<FiTrash />} danger>Xóa</Menu.Item>
-                                                    </Menu>
-                                                }
-                                                trigger={["click"]}
-                                            >
-                                                <FiMoreVertical className="cursor-pointer" />
-                                            </Dropdown>
-                                        </td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    </CardContent>
-                </Card>
+  const updatePaymentStatus = async (paymentId: string, newStatus: string) => {
+    try {
+      await api.put(`/payment/update-status/${paymentId}`, { status: newStatus });
+      setPayments((prev) =>
+        prev.map((p) => (p._id === paymentId ? { ...p, status: newStatus } : p))
+      );
+      message.success("Cập nhật trạng thái thành công!");
+    } catch (error) {
+      console.error("Lỗi cập nhật trạng thái:", error);
+      message.error("Không thể cập nhật trạng thái.");
+    }
+  };
 
-                {/* Pagination Component */}
-                <Pagination
-                    current={currentPage}
-                    total={cars.length}
-                    pageSize={pageSize}
-                    onChange={(page) => setCurrentPage(page)}
-                    className="mt-4 flex justify-center"
-                />
-            </div>
+  return (
+    <div className="flex min-h-screen bg-gray-100">
+      <div className="flex-1 p-6">
+        <h1 className="text-2xl font-bold">Quản lí thanh toán</h1>
+
+        {/* Thanh tìm kiếm */}
+        <div className="mt-4 flex items-center space-x-2">
+          <div className="relative w-80">
+            <FiSearch className="absolute left-3 top-3 text-gray-500" />
+            <input
+              type="text"
+              placeholder="Tìm kiếm"
+              className="pl-10 p-2 border rounded-md w-full"
+            />
+          </div>
         </div>
-    );
+
+        {/* Bảng thanh toán */}
+        <Card className="mt-6">
+          <CardContent>
+            <table className="w-full border-collapse">
+              <thead>
+                <tr className="bg-gray-200 text-left">
+                  <th className="p-3">Người thuê</th>
+                  <th className="p-3">Liên hệ</th>
+                  <th className="p-3">Xe thuê</th>
+                  <th className="p-3 text-center">Ngày thuê</th>
+                  <th className="p-3 text-center">Số tiền</th>
+                  <th className="p-3 text-center">Phương thức</th>
+                  <th className="p-3 text-center">Trạng thái</th>
+                  <th className="p-3 text-center">Ngày thanh toán</th>
+                  <th className="p-3 text-center"></th>
+                </tr>
+              </thead>
+              <tbody>
+                {paginatedPayments.map((payment) => (
+                  <tr key={payment._id} className="border-t hover:bg-gray-100">
+                    <td className="p-3">{payment.bookingId?.user?.personalInfo?.name || "N/A"}</td>
+                    <td className="p-3">{payment.bookingId?.user?.phoneNumber || "N/A"}</td>
+                    <td className="p-3">
+                      {payment.bookingId?.car?.brand} {payment.bookingId?.car?.name} (
+                      {payment.bookingId?.car?.licensePlate})
+                    </td>
+                    <td className="p-3 text-center">
+                      {new Date(payment.bookingId?.startDate).toLocaleDateString()} -{" "}
+                      {new Date(payment.bookingId?.endDate).toLocaleDateString()}
+                    </td>
+                    <td className="p-3 text-center">{payment.amount.toLocaleString()} VNĐ</td>
+                    <td className="p-3 text-center">{payment.paymentMethod}</td>
+                    <td className="p-3 text-center">
+                      <Select
+                        defaultValue={payment.status}
+                        style={{ width: 120 }}
+                        onChange={(val) => updatePaymentStatus(payment._id, val)}
+                      >
+                        {paymentStatuses.map((status) => (
+                          <Option key={status} value={status}>
+                            {status}
+                          </Option>
+                        ))}
+                      </Select>
+                    </td>
+                    <td className="p-3 text-center">
+                      {new Date(payment.createdAt).toLocaleDateString()}
+                    </td>
+                    <td className="p-3 text-center">
+                      <Dropdown
+                        overlay={
+                          <Menu onClick={(e) => message.info(`Click: ${e.key}`)}>
+                            <Menu.Item key="edit" icon={<FiEdit />}>
+                              Cập nhật
+                            </Menu.Item>
+                            <Menu.Item key="delete" icon={<FiTrash />} danger>
+                              Xóa
+                            </Menu.Item>
+                          </Menu>
+                        }
+                        trigger={["click"]}
+                      >
+                        <FiMoreVertical className="cursor-pointer" />
+                      </Dropdown>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </CardContent>
+        </Card>
+
+        {/* Phân trang */}
+        <Pagination
+          current={currentPage}
+          total={payments.length}
+          pageSize={pageSize}
+          onChange={(page) => setCurrentPage(page)}
+          className="mt-4 flex justify-center"
+        />
+      </div>
+    </div>
+  );
 }
