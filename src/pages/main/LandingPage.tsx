@@ -113,11 +113,11 @@ const Landing = () => {
                         Xe tự lái
                     </button>
                     <button 
-                        className={`px-6 py-2 rounded transition ${searchData.carType === "Xe có tài" ? "bg-orange-500 text-white" : "bg-white text-orange-500 border border-orange-500"}`}
-                        onClick={() => setSearchData({ ...searchData, carType: "Xe có tài" })}
-                    >
-                        Xe có tài
-                    </button>
+      className="px-6 py-2 rounded border border-gray-300 text-gray-400 cursor-not-allowed bg-gray-100"
+      disabled
+    >
+      Xe có tài (sắp ra mắt)
+    </button>
                 </div>
             </section>
             {showDateModal && (

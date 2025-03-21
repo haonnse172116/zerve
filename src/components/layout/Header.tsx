@@ -19,7 +19,7 @@ const Header = () => {
       {/* Navigation */}
       <nav className="hidden md:flex space-x-6 text-gray-600 text-sm">
         <Link to="about" className="hover:text-gray-900">Về RentConnect</Link>
-        <a href="#" className="hover:text-gray-900">Trở thành chủ xe</a>
+        {/* <a href="#" className="hover:text-gray-900">Trở thành chủ xe</a> */}
         <Link to="car-list" className="hover:text-gray-900">Danh sách xe</Link>
         {isAuthenticated && <Link to="/my-trips" className="hover:text-gray-900">Chuyến đi của tôi</Link>}
       </nav>
