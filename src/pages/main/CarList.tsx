@@ -117,13 +117,14 @@ const SearchFilterCarList = () => {
           filteredCars.map((car) => (
             <div
               key={car._id}
+              onClick={() => navigate(`/car-detail/${car._id}`)}
               className="bg-white rounded-xl shadow-lg overflow-hidden"
             >
               <img
                 src={car.images?.[0]}
                 alt="Car Image"
                 className="w-full h-64 object-cover cursor-pointer"
-                onClick={() => navigate(`/car-detail/${car._id}`)}
+               
               />
               <div className="p-4">
                 <h3 className="text-lg font-semibold">{car.name}</h3>
