@@ -53,30 +53,7 @@ export default function LoginPage() {
 
   // 🔹 Xử lý đăng nhập bằng Google
   const handleGoogleLogin = async () => {
-    try {
-      const res = await fetch("https://backend-rentalcar.onrender.com/user/google", {
-        method: "GET",
-        credentials: "include", // Đảm bảo gửi cookie/session nếu có
-      });
-  
-      if (!res.ok) throw new Error("Đăng nhập thất bại");
-  
-      const data = await res.json();
-      
-      if (data.token && data.user) {
-        sessionStorage.setItem("token", data.token);
-        sessionStorage.setItem("role", data.user.role);
-        login(data.user, data.token);
-  
-        if (data.user.role === "admin") {
-          navigate("/admin/dashboard");
-        } else {
-          navigate("/");
-        }
-      }
-    } catch (error) {
-      console.error("Lỗi đăng nhập:", error);
-    }
+    window.location.href = "https://backend-rentalcar.onrender.com/user/google";
   };
   return (
     <div className="flex h-screen">

@@ -1,32 +1,30 @@
 import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { useAuth } from "../../components/context/AuthContext";
 
-export default function GoogleCallback() {
+export default function GoogleAuthSuccess() {
+  const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const { login } = useAuth();
 
   useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const token = params.get("token");
-    const user = params.get("user") ? JSON.parse(decodeURIComponent(params.get("user")!)) : null;
-    console.log(user)
+    const token = searchParams.get("token");
+    const user = searchParams.get("user");
+
     if (token && user) {
       sessionStorage.setItem("token", token);
-      sessionStorage.setItem("role", user.role);
-      login(user, token);
+      sessionStorage.setItem("role", JSON.parse(user).role);
+      login(JSON.parse(user), token);
 
-      // 🔹 Điều hướng về trang phù hợp
-      if (user.role === "admin") {
+      if (JSON.parse(user).role === "admin") {
         navigate("/admin/dashboard");
       } else {
         navigate("/");
       }
     } else {
-      console.error("Lỗi khi lấy dữ liệu từ Google OAuth");
-      navigate("/login"); // Chuyển hướng về login nếu có lỗi
+      navigate("/login");
     }
-  }, [navigate, login]);
+  }, []);
 
-  return <p>Đang đăng nhập, vui lòng chờ...</p>;
+  return <p>Đang xử lý đăng nhập...</p>;
 }
