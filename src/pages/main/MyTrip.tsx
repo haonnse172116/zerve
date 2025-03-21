@@ -106,7 +106,13 @@ export default function MyTrips() {
                         : "text-gray-600"
                     }`}
                   >
-                    Trạng thái: {booking.status}
+                     Trạng thái:{" "}
+  {{
+    "Completed": "Hoàn tất",
+    "Confirmed": "Đã xác nhận",
+    "Pending Confirmation": "Chờ xác nhận trả xe",
+    "Pending": "Chờ xác nhận",
+  }[booking.status] || "Không xác định"}
                   </p>
                 </div>
               </div>
