@@ -10,7 +10,7 @@ export default function GoogleCallback() {
     const params = new URLSearchParams(window.location.search);
     const token = params.get("token");
     const user = params.get("user") ? JSON.parse(decodeURIComponent(params.get("user")!)) : null;
-
+    console.log(user)
     if (token && user) {
       sessionStorage.setItem("token", token);
       sessionStorage.setItem("role", user.role);
