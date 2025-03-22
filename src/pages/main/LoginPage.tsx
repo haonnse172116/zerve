@@ -2,7 +2,7 @@ import { useState } from "react";
 import { FaFacebook, FaGoogle } from "react-icons/fa";
 import api from "../../api";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../components/context/AuthContext";
 import { Button, message } from "antd";
 
@@ -59,7 +59,9 @@ export default function LoginPage() {
     <div className="flex h-screen">
       {/* Left Side: Login Form */}
       <div className="w-1/2 flex items-center justify-center p-10">
+        <Link to="/">
         <img src="/Logo.png" alt="Rent Connect" className="absolute top-2 left-5 w-32" />
+        </Link>
         <div className="max-w-screen-md w-full">
           <h1 className="text-3xl font-bold">Đăng nhập</h1>
           <p className="mt-2 text-gray-600">
