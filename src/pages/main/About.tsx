@@ -7,12 +7,12 @@ export default function About() {
         {/* Banner Image */}
         <img
           src="/landingpic.jpg"
-          alt="Zerve Banner"
+          alt="RentConnect Banner"
           className="w-full h-64 object-cover rounded-xl shadow-sm"
         />
 
         <div className="text-center">
-          <h1 className="text-3xl font-bold text-orange-500">Về Zerve 🚗</h1>
+          <h1 className="text-3xl font-bold text-orange-500">Về RentConnect 🚗</h1>
           <p className="text-gray-600 mt-2 text-lg">
             Nền tảng thuê xe tự lái tiện lợi, nhanh chóng & minh bạch.
           </p>
@@ -23,7 +23,7 @@ export default function About() {
           <div className="space-y-4">
             <h2 className="text-xl font-semibold text-gray-800">📜 Lịch sử hình thành</h2>
             <p className="text-gray-600 text-sm">
-              Zerve được tạo ra từ một ý tưởng nhỏ: giúp việc thuê xe dễ như gọi trà sữa.
+              RentConnect được tạo ra từ một ý tưởng nhỏ: giúp việc thuê xe dễ như gọi trà sữa.
               Từ những trải nghiệm thuê xe phiền phức, chúng tôi muốn tạo ra một nền tảng
               thuê xe **đơn giản – minh bạch – thông minh**.
             </p>
@@ -50,7 +50,7 @@ export default function About() {
           </div>
 
           <div className="space-y-4 md:col-span-2">
-            <h2 className="text-xl font-semibold text-gray-800 text-center">💡 Vì sao chọn Zerve?</h2>
+            <h2 className="text-xl font-semibold text-gray-800 text-center">💡 Vì sao chọn RentConnect?</h2>
             <div className="grid sm:grid-cols-2 gap-4">
               <div className="bg-orange-50 p-4 rounded-lg text-sm">
                 ✅ Đặt xe trong vài giây – không thủ tục rườm rà.
@@ -75,7 +75,7 @@ export default function About() {
 
         {/* Call to Action */}
         <div className="text-center mt-10">
-          <h2 className="text-xl font-semibold text-gray-800">🚀 Sẵn sàng đồng hành cùng Zerve?</h2>
+          <h2 className="text-xl font-semibold text-gray-800">🚀 Sẵn sàng đồng hành cùng RentConnect?</h2>
           <p className="text-gray-600 mt-2">
             Trải nghiệm ngay dịch vụ thuê xe hiện đại nhất Việt Nam.
           </p>
