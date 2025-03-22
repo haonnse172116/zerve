@@ -118,7 +118,7 @@ export default function LoginPage() {
           
           <p className="text-center mt-6 text-gray-600">hoặc tiếp tục với</p>
           
-          <div onClick={handleGoogleLogin} className="flex justify-center items-center mt-4 space-x-4 cursor-pointer">
+          <div onClick={handleGoogleLogin} className="flex justify-center items-center mt-4 space-x-2 cursor-pointer">
   <FaGoogle className="text-red-500 text-2xl" />
   <span>Google</span>
 </div>
