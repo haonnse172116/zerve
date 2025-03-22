@@ -43,6 +43,9 @@ export default function RegisterPage() {
       setLoading(false);
     }
   };
+  const handleGoogleLogin = async () => {
+    window.location.href = "https://backend-rentalcar.onrender.com/user/google";
+  };
   return (
     <div className="flex h-screen">
       {/* Left Side: Register Form */}
@@ -107,10 +110,10 @@ export default function RegisterPage() {
           
           <p className="text-center mt-6 text-gray-600">hoặc tiếp tục với</p>
           
-          <div className="flex justify-center mt-4 space-x-4">
-            <FaFacebook className="text-blue-600 text-2xl cursor-pointer" />
-            <FaGoogle className="text-red-500 text-2xl cursor-pointer" />
-          </div>
+          <div onClick={handleGoogleLogin} className="flex justify-center items-center mt-4 space-x-2 cursor-pointer">
+  <FaGoogle className="text-red-500 text-2xl" />
+  <span>Google</span>
+</div>
         </div>
       </div>
       
