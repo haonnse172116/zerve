@@ -118,9 +118,8 @@ export default function LoginPage() {
           
           <p className="text-center mt-6 text-gray-600">hoặc tiếp tục với</p>
           
-          <div className="flex justify-center mt-4 space-x-4">
-            {/* <FaFacebook className="text-blue-600 text-2xl cursor-pointer" /> */}
-            <FaGoogle className="text-red-500 text-2xl cursor-pointer" onClick={handleGoogleLogin} />
+          <div onClick={handleGoogleLogin} className="flex justify-center mt-4 space-x-4">
+            <FaGoogle className="text-red-500 text-2xl cursor-pointer" />Google
           </div>
         </div>
       </div>
