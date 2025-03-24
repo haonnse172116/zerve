@@ -21,6 +21,10 @@ import MyTrips from "./pages/main/MyTrip";
 import PrivateRoute from "./components/context/PrivateRoute"; // Import Private Route
 import GoogleCallback from "./pages/main/GoogleCallBack";
 import About from "./pages/main/About";
+import RegulationPage from "./pages/main/RegulationPage";
+import PrivacyPolicyPage from "./pages/main/PrivacyPage";
+import PolicyAndRegulationPage from "./pages/main/PolicyRegulationPage";
+import DisputeResolutionPage from "./pages/main/DisputeResolutionPage";
 
 function App() {
   return (
@@ -32,6 +36,10 @@ function App() {
           <Route path="car-list" element={<CarList />} />
           <Route path="car-detail/:carId" element={<CarDetail />} />
           <Route path="/about" element={<About />} />
+          <Route path="/regulation" element={<RegulationPage />} />
+          <Route path="/privacy" element={<PrivacyPolicyPage />} />
+          <Route path="/policy&regulation" element={<PolicyAndRegulationPage />} />
+          <Route path="/DisputeResolution" element={<DisputeResolutionPage />} />
 
 
           {/* 🔒 Bảo vệ các route cần đăng nhập */}
