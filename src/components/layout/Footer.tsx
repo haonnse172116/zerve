@@ -1,4 +1,5 @@
 import "@fortawesome/fontawesome-free/css/all.min.css";
+import { Link } from "react-router-dom";
 
 const Footer = () => {
   return (
@@ -8,21 +9,37 @@ const Footer = () => {
         <div>
           <img src="/Logo.png" alt="RentConnect" className="w-36 mb-4" />
           <p>RentConnect là nền tảng trực tuyến giúp người dùng dễ dàng tìm kiếm và kết nối với các dịch vụ thuê xe từ bên thứ hai.</p>
-          <p className="mt-4">(84) 123-456-789</p>
+          <p className="mt-4">(84) 337-248-801</p>
           <p>rentconnect@gmail.com</p>
         </div>
-        
+
         {/* Policies */}
         <div>
           <h3 className="font-semibold mb-3">Chính sách</h3>
           <ul className="space-y-2">
-            <li><a href="#" className="hover:text-gray-900">Chính sách và quy định</a></li>
-            <li><a href="#" className="hover:text-gray-900">Quy chế hoạt động</a></li>
-            <li><a href="#" className="hover:text-gray-900">Bảo mật thông tin</a></li>
-            <li><a href="#" className="hover:text-gray-900">Giải quyết tranh chấp</a></li>
+            <li>
+              <Link to="policy&regulation" className="hover:text-gray-900">
+                Chính sách và quy định
+              </Link>
+            </li>
+            <li>
+              <Link to="regulation" className="hover:text-gray-900">
+                Quy chế hoạt động
+              </Link>
+            </li>
+            <li>
+              <Link to="privacy" className="hover:text-gray-900">
+                Bảo mật thông tin
+              </Link>
+            </li>
+            <li>
+              <Link to="DisputeResolution" className="hover:text-gray-900">
+                Giải quyết tranh chấp
+              </Link>
+            </li>
           </ul>
         </div>
-        
+
         {/* Locations */}
         <div>
           <h3 className="font-semibold mb-3">Địa điểm dịch vụ</h3>
@@ -32,7 +49,7 @@ const Footer = () => {
             <li>Hà Nội</li>
           </ul>
         </div>
-        
+
         {/* Social Media */}
         <div>
           <h3 className="font-semibold mb-3">Mạng xã hội</h3>
