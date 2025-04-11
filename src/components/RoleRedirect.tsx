@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 
 const RoleRedirect = ({ children }: { children: React.ReactNode }) => {
   const navigate = useNavigate();
-  const role = sessionStorage.getItem("role");
+  const role = localStorage.getItem("role");
 
   useEffect(() => {
     // Kiểm tra nếu người dùng không phải là admin thì điều hướng ra ngoài trang admin
