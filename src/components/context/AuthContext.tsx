@@ -28,8 +28,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   // 🛠 Kiểm tra Local Storage khi ứng dụng load
   useEffect(() => {
-    const storedUser = sessionStorage.getItem("user");
-    const storedToken = sessionStorage.getItem("token");
+    const storedUser = localStorage.getItem("user");
+    const storedToken = localStorage.getItem("token");
 
     if (storedUser && storedToken) {
       setUser(JSON.parse(storedUser));
@@ -39,8 +39,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   // 🛠 Xử lý đăng nhập
   const login = (userData: User, token: string) => {
-    sessionStorage.setItem("user", JSON.stringify(userData));
-    sessionStorage.setItem("token", token);
+    localStorage.setItem("user", JSON.stringify(userData));
+    localStorage.setItem("token", token);
     console.log(user);
     console.log(token);
     setUser(userData);
@@ -50,9 +50,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   // 🛠 Xử lý đăng xuất
   const logout = () => {
-    sessionStorage.removeItem("user");
-    sessionStorage.removeItem("token");
-    sessionStorage.removeItem("role");
+    localStorage.removeItem("user");
+    localStorage.removeItem("token");
+    localStorage.removeItem("role");
     setUser(null);
     setIsAuthenticated(false);
   };
