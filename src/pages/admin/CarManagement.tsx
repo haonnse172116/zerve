@@ -25,7 +25,7 @@ export default function CarManagement() {
     const [cars, setCars] = useState<Car[]>([]);  // Dữ liệu xe từ API
     const [currentPage, setCurrentPage] = useState<number>(1);
     const pageSize = 5;
-
+    
     // 🛠 Gọi API để lấy danh sách xe
     useEffect(() => {
         const fetchCars = async () => {
@@ -41,8 +41,18 @@ export default function CarManagement() {
     }, []);
 
     // Lấy dữ liệu phân trang
-    const paginatedCars = cars.slice((currentPage - 1) * pageSize, currentPage * pageSize);
+    const [searchTerm, setSearchTerm] = useState<string>("");
 
+    // Lọc dữ liệu theo searchTerm
+    const filteredCars = cars.filter(
+      (car) =>
+        car.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        car.licensePlate.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+    
+    // Dữ liệu phân trang từ danh sách đã lọc
+    const paginatedCars = filteredCars.slice((currentPage - 1) * pageSize, currentPage * pageSize);
+    
     return (
         <div className="flex min-h-screen bg-gray-100">
             {/* Nội dung chính */}
@@ -54,12 +64,18 @@ export default function CarManagement() {
                     <div className="relative w-80">
                         <FiSearch className="absolute left-3 top-3 text-gray-500" />
                         <input
-                            type="text"
-                            placeholder="Tìm kiếm"
-                            className="pl-10 p-2 border rounded-md w-full"
-                        />
+  type="text"
+  placeholder="Tìm theo tên hoặc biển số"
+  className="pl-10 p-2 border rounded-md w-full"
+  value={searchTerm}
+  onChange={(e) => {
+    setSearchTerm(e.target.value);
+    setCurrentPage(1); // Reset về trang đầu khi tìm kiếm
+  }}
+/>
+
                     </div>
-                    <Button className="bg-red-500 text-white px-4 py-2 rounded-lg">Thêm xe</Button>
+                    {/* <Button className="bg-red-500 text-white px-4 py-2 rounded-lg">Thêm xe</Button> */}
                 </div>
 
                 {/* Bảng hiển thị danh sách xe */}
@@ -113,7 +129,7 @@ export default function CarManagement() {
                 {/* Phân trang */}
                 <Pagination
                     current={currentPage}
-                    total={cars.length}
+                    total={filteredCars.length}
                     pageSize={pageSize}
                     onChange={(page) => setCurrentPage(page)}
                     className="mt-4 flex justify-center"

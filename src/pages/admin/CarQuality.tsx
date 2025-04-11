@@ -40,6 +40,7 @@ export default function PaymentManagement() {
   const [payments, setPayments] = useState<Payment[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const pageSize = 5;
+  const [searchTerm, setSearchTerm] = useState<string>("");
 
   useEffect(() => {
     const fetchPayments = async () => {
@@ -54,8 +55,26 @@ export default function PaymentManagement() {
     fetchPayments();
   }, []);
 
-  const paginatedPayments = payments.slice((currentPage - 1) * pageSize, currentPage * pageSize);
-
+  const filteredPayments = payments.filter((payment) => {
+    const name = payment.bookingId?.user?.personalInfo?.name?.toLowerCase() || "";
+    const contact =
+      (payment.bookingId?.user?.phoneNumber ||
+        payment.bookingId?.user?.personalInfo?.email ||
+        "").toLowerCase();
+    const amount = payment.amount.toString();
+  
+    return (
+      name.includes(searchTerm.toLowerCase()) ||
+      contact.includes(searchTerm.toLowerCase()) ||
+      amount.includes(searchTerm)
+    );
+  });
+  
+  const paginatedPayments = filteredPayments.slice(
+    (currentPage - 1) * pageSize,
+    currentPage * pageSize
+  );
+  
   const updatePaymentStatus = async (paymentId: string, newStatus: string) => {
     try {
       await api.put(`/payment/update-status/${paymentId}`, { status: newStatus });
@@ -79,10 +98,15 @@ export default function PaymentManagement() {
           <div className="relative w-80">
             <FiSearch className="absolute left-3 top-3 text-gray-500" />
             <input
-              type="text"
-              placeholder="Tìm kiếm"
-              className="pl-10 p-2 border rounded-md w-full"
-            />
+  type="text"
+  placeholder="Tìm theo tên, liên hệ hoặc số tiền"
+  className="pl-10 p-2 border rounded-md w-full"
+  value={searchTerm}
+  onChange={(e) => {
+    setSearchTerm(e.target.value);
+    setCurrentPage(1); // Reset về trang đầu khi lọc
+  }}
+/>
           </div>
         </div>
 
@@ -168,7 +192,7 @@ export default function PaymentManagement() {
         {/* Phân trang */}
         <Pagination
           current={currentPage}
-          total={payments.length}
+          total={filteredPayments.length}
           pageSize={pageSize}
           onChange={(page) => setCurrentPage(page)}
           className="mt-4 flex justify-center"

@@ -30,8 +30,23 @@ interface Booking {
 export default function CarOrder() {
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const pageSize = 5;
+  const [searchTerm, setSearchTerm] = useState<string>("");
 
+  const pageSize = 5;
+  const filteredBookings = bookings.filter((booking) => {
+    const name = booking.user.personalInfo.name?.toLowerCase() || "";
+    const contact = (booking.user.phoneNumber || booking.user.personalInfo.email || "").toLowerCase();
+    const createdDate = new Date(booking.createdAt).toLocaleDateString("vi-VN");
+
+    return (
+      name.includes(searchTerm.toLowerCase()) ||
+      contact.includes(searchTerm.toLowerCase()) ||
+      createdDate.includes(searchTerm)
+    );
+  });
+  
+  const paginatedBookings = filteredBookings.slice((currentPage - 1) * pageSize, currentPage * pageSize);
+  
   useEffect(() => {
     const fetchBookings = async () => {
       try {
@@ -88,10 +103,15 @@ export default function CarOrder() {
           <div className="relative w-80">
             <FiSearch className="absolute left-3 top-3 text-gray-500" />
             <input
-              type="text"
-              placeholder="Tìm kiếm"
-              className="pl-10 p-2 border rounded-md w-full"
-            />
+  type="text"
+  placeholder="Tìm theo tên, liên hệ hoặc ngày đặt xe"
+  className="pl-10 p-2 border rounded-md w-full"
+  value={searchTerm}
+  onChange={(e) => {
+    setSearchTerm(e.target.value);
+    setCurrentPage(1); // Reset về trang đầu khi tìm kiếm
+  }}
+/>
           </div>
         </div>
 
@@ -111,7 +131,7 @@ export default function CarOrder() {
                 </tr>
               </thead>
               <tbody>
-                {bookings.slice((currentPage - 1) * pageSize, currentPage * pageSize).map((booking) => (
+                {paginatedBookings.map((booking) => (
                   <tr key={booking._id} className="border-t hover:bg-gray-100">
                     <td className="p-3">{booking.user.personalInfo.name}</td>
                     <td className="p-3">
@@ -165,7 +185,7 @@ export default function CarOrder() {
 
         <Pagination
           current={currentPage}
-          total={bookings.length}
+          total={filteredBookings.length}
           pageSize={pageSize}
           onChange={(page) => setCurrentPage(page)}
           className="mt-4 flex justify-center"
