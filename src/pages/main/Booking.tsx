@@ -10,7 +10,7 @@ const Booking = () => {
   const { searchData } = useCarSearch();
   const navigate = useNavigate();
 
-  const userRef = useRef(sessionStorage.getItem("user"));
+  const userRef = useRef(localStorage.getItem("user"));
   const user = userRef.current ? JSON.parse(userRef.current) : null;
 
   const [car, setCar] = useState<any>(null);

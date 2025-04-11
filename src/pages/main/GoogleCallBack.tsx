@@ -13,9 +13,9 @@ export default function GoogleAuthSuccess() {
         const decodedUser = jwtDecode(token);
         console.log("Decoded User:", decodedUser);
 
-        // 🔹 Lưu token & user vào sessionStorage
-        sessionStorage.setItem("token", token);
-        sessionStorage.setItem("user", JSON.stringify(decodedUser));
+        // 🔹 Lưu token & user vào localStorage
+        localStorage.setItem("token", token);
+        localStorage.setItem("user", JSON.stringify(decodedUser));
       if (decodedUser.role === "admin") {
         navigate("/admin/dashboard");
       } else {

@@ -28,8 +28,8 @@ export default function LoginPage() {
       const {token, user} = response.data;
 
       if (token && user) {
-        sessionStorage.setItem("token", token);
-        sessionStorage.setItem("role", user.role); 
+        localStorage.setItem("token", token);
+        localStorage.setItem("role", user.role); 
         console.log("role:", user.role);
         login(user, token); 
         if (user.role === "admin") {
