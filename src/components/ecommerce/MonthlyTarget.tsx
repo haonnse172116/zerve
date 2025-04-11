@@ -7,7 +7,7 @@ import { MoreDotIcon } from "../../icons";
 import api from "../../api";
 
 export default function MonthlyTarget() {
-  const TARGET = 20_000_000; // 🎯 Mục tiêu doanh thu tháng (10 triệu)
+  const TARGET = 10_000_000; // 🎯 Mục tiêu doanh thu tháng (10 triệu)
   const [totalRevenue, setTotalRevenue] = useState<number>(0);
   const [progress, setProgress] = useState<number>(0);
   const [isOpen, setIsOpen] = useState(false);
@@ -91,9 +91,9 @@ export default function MonthlyTarget() {
       <div className="px-5 pt-5 bg-white shadow-default rounded-2xl pb-11 dark:bg-white sm:px-6 sm:pt-6">
         <div className="flex justify-between">
           <h3 className="text-lg font-semibold text-gray-800 dark:text-black">
-            Monthly Target
+           Revenue Target
           </h3>
-          <div className="relative inline-block">
+          {/* <div className="relative inline-block">
             <button onClick={toggleDropdown}>
               <MoreDotIcon className="text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 size-6" />
             </button>
@@ -111,7 +111,7 @@ export default function MonthlyTarget() {
                 Delete
               </DropdownItem>
             </Dropdown>
-          </div>
+          </div> */}
         </div>
 
         {/* Biểu đồ */}
@@ -127,7 +127,7 @@ export default function MonthlyTarget() {
         {/* Mô tả doanh thu */}
         <p className="mx-auto mt-10 w-full max-w-[380px] text-center text-sm text-gray-500 sm:text-base">
           Bạn đã đạt{" "}
-          <strong className="text-gray-800">{progress.toFixed(1)}%</strong> mục tiêu tháng (
+          <strong className="text-gray-800">{progress.toFixed(1)}%</strong> mục tiêu (
           <strong>{totalRevenue.toLocaleString("vi-VN")} VNĐ</strong> /{" "}
           {TARGET.toLocaleString("vi-VN")} VNĐ). Tiếp tục phát huy nhé! 💪
         </p>

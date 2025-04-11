@@ -54,10 +54,10 @@ useEffect(() => {
               {totalUsers.toLocaleString()}
             </h4>
           </div>
-          <Badge color="success">
+          {/* <Badge color="success">
             <ArrowUpIcon />
             +%
-          </Badge>
+          </Badge> */}
         </div>
       </div>
 
@@ -76,10 +76,10 @@ useEffect(() => {
 </h4>
           </div>
 
-          <Badge color="error">
+          {/* <Badge color="error">
             <ArrowDownIcon />
             9.05%
-          </Badge>
+          </Badge> */}
         </div>
       </div>
     </div>
