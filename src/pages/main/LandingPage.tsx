@@ -153,7 +153,8 @@ const Landing = () => {
                 </div>
             </section>
             {showDateModal && (
-                <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50">
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-900 bg-opacity-50"
+                style={{ backdropFilter: "blur(2px)" }}>
                     <div className="bg-white p-6 rounded-lg shadow-lg w-96">
                         <h3 className="text-xl font-semibold mb-4">Chọn ngày và giờ</h3>
                         <DatePicker
