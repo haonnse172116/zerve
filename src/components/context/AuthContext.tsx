@@ -15,6 +15,8 @@ interface AuthContextType {
   login: (userData: User, token: string) => void;
   logout: () => void;
   isAuthenticated: boolean;
+  isLoading: boolean;
+
 }
 
 // 🛠 Tạo Context
@@ -25,6 +27,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [token, setToken] = useState<String | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   // 🛠 Kiểm tra Local Storage khi ứng dụng load
   useEffect(() => {
@@ -35,6 +38,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       setUser(JSON.parse(storedUser));
       setIsAuthenticated(true);
     }
+    setIsLoading(false); 
   }, []);
 
   // 🛠 Xử lý đăng nhập
@@ -58,7 +62,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout, isAuthenticated }}>
+    <AuthContext.Provider value={{ user, login, logout, isAuthenticated, isLoading }}>
       {children}
     </AuthContext.Provider>
   );
