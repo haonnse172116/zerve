@@ -15,9 +15,6 @@ interface User {
   role: string;
 }
 
-const handleMenuClick = (e: any) => {
-  message.info(`Click on menu item: ${e.key}`);
-};
 
 export default function UserManagement() {
   const [users, setUsers] = useState<User[]>([]); // Dữ liệu người dùng từ API

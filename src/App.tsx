@@ -26,6 +26,7 @@ import PrivacyPolicyPage from "./pages/main/PrivacyPage";
 import PolicyAndRegulationPage from "./pages/main/PolicyRegulationPage";
 import DisputeResolutionPage from "./pages/main/DisputeResolutionPage";
 import UserManagement from "./pages/admin/UserList";
+import PaymentSuccess from "./pages/payment/paymentSuccess";
 
 function App() {
   return (
@@ -49,6 +50,7 @@ function App() {
             <Route path="profile" element={<ProfilePage />} />
             <Route path="booking/:carId" element={<Booking />} />
             <Route path="my-trips" element={<MyTrips />} />
+            <Route path="payment-success" element={<PaymentSuccess />} />
           </Route>
         </Route>
 

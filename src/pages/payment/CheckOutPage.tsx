@@ -36,7 +36,7 @@ const PaymentSelection = () => {
       // Nếu thanh toán thành công
       if (response.status === 200) {
         message.success("Thanh toán thành công!");
-        navigate("/car-list"); // Điều hướng tới trang carlist
+        navigate("/payment-success"); // Điều hướng tới trang success
 
       } else {
         message.error("Thanh toán thất bại, vui lòng thử lại!");
