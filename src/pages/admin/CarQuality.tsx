@@ -151,7 +151,7 @@ export default function PaymentManagement() {
                     <td className="p-3 text-center">{payment.paymentMethod}</td>
                     <td className="p-3 text-center">
                       <Select
-                        defaultValue={payment.status}
+                        value={payment.status}
                         style={{ width: 120 }
                       }
                       disabled={payment.status === "Paid"} 
