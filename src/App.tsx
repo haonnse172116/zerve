@@ -25,6 +25,7 @@ import RegulationPage from "./pages/main/RegulationPage";
 import PrivacyPolicyPage from "./pages/main/PrivacyPage";
 import PolicyAndRegulationPage from "./pages/main/PolicyRegulationPage";
 import DisputeResolutionPage from "./pages/main/DisputeResolutionPage";
+import UserManagement from "./pages/admin/UserList";
 
 function App() {
   return (
@@ -58,6 +59,7 @@ function App() {
           <Route path="car-order" element={<CarOrder />} />
           <Route path="driver-management" element={<DriverManagement />} />
           <Route path="car-payment" element={<CarQuality />} />
+          <Route path="user-list" element={<UserManagement/>}/>
         </Route>
 
         {/* Route đăng nhập & đăng ký */}

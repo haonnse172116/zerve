@@ -28,6 +28,9 @@ export default function AdminLayout() {
         <Link to="/admin/driver-management" className="p-3 rounded-lg hover:bg-gray-200">
           Quản lí chủ xe
         </Link>
+        <Link to="/admin/user-list" className="p-3 rounded-lg hover:bg-gray-200">
+          Quản lí khách hàng
+        </Link>
 
         {/* 🔥 Nút Đăng xuất (gọi logout từ AuthContext) */}
         <button

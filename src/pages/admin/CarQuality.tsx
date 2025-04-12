@@ -152,7 +152,9 @@ export default function PaymentManagement() {
                     <td className="p-3 text-center">
                       <Select
                         defaultValue={payment.status}
-                        style={{ width: 120 }}
+                        style={{ width: 120 }
+                      }
+                      disabled={payment.status === "Paid"} 
                         onChange={(val) => updatePaymentStatus(payment._id, val)}
                       >
                         {paymentStatuses.map((status) => (
