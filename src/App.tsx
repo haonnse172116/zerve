@@ -50,7 +50,7 @@ function App() {
             <Route path="profile" element={<ProfilePage />} />
             <Route path="booking/:carId" element={<Booking />} />
             <Route path="my-trips" element={<MyTrips />} />
-            <Route path="payment-success" element={<PaymentSuccess />} />
+            <Route path="payment-success" element={<PaymentSuccess/>} />
           </Route>
         </Route>
 
