@@ -26,7 +26,7 @@ import PrivacyPolicyPage from "./pages/main/PrivacyPage";
 import PolicyAndRegulationPage from "./pages/main/PolicyRegulationPage";
 import DisputeResolutionPage from "./pages/main/DisputeResolutionPage";
 import UserManagement from "./pages/admin/UserList";
-import PaymentSuccess from "./pages/payment/paymentSuccess";
+import PaymentSuccess from "./pages/payment/paymentCheck";
 
 function App() {
   return (
