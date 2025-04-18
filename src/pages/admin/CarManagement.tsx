@@ -106,7 +106,7 @@ export default function CarManagement() {
                                             <img src={car.images[0] || "/default-car.jpg"} alt="Car" className="w-8 h-8 rounded-full" />
                                         </td>
                                         <td className="p-3">{new Date(car.updatedAt).toLocaleDateString()}</td>
-                                        <td className="p-3 relative">
+                                        {/* <td className="p-3 relative">
                                             <Dropdown
                                                 overlay={
                                                     <Menu onClick={handleMenuClick}>
@@ -118,7 +118,7 @@ export default function CarManagement() {
                                             >
                                                 <FiMoreVertical className="cursor-pointer" />
                                             </Dropdown>
-                                        </td>
+                                        </td> */}
                                     </tr>
                                 ))}
                             </tbody>
