@@ -1,10 +1,10 @@
+// 👇 Thêm import useState, useEffect như bạn đang có
 import { useState, useEffect } from "react";
-import { Dropdown, Menu, message, Pagination, Button } from "antd";
+import { Dropdown, Menu, message, Pagination, Button, Modal, Tag } from "antd";
 import { FiEdit, FiTrash, FiSearch, FiMoreVertical, FiCheckCircle } from "react-icons/fi";
 import { Card, CardContent } from "../../components/card/card";
-import { Tag } from "antd";
 import api from "../../api";
-import { Modal } from "antd";
+
 interface Booking {
   _id: string;
   user: {
@@ -31,7 +31,9 @@ export default function CarOrder() {
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [searchTerm, setSearchTerm] = useState<string>("");
-
+  const [cancelModalVisible, setCancelModalVisible] = useState(false);
+  const [selectedBookingId, setSelectedBookingId] = useState<string | null>(null);
+  const [cancelReason, setCancelReason] = useState("");
   const pageSize = 5;
   const filteredBookings = bookings.filter((booking) => {
     const name = booking.user.personalInfo.name?.toLowerCase() || "";
@@ -44,9 +46,9 @@ export default function CarOrder() {
       createdDate.includes(searchTerm)
     );
   });
-  
+
   const paginatedBookings = filteredBookings.slice((currentPage - 1) * pageSize, currentPage * pageSize);
-  
+
   useEffect(() => {
     const fetchBookings = async () => {
       try {
@@ -60,17 +62,12 @@ export default function CarOrder() {
     fetchBookings();
   }, []);
 
-  // ✅ Hàm xác nhận trả xe
   const handleConfirmReturn = async (bookingId: string) => {
     try {
       await api.post("/booking/confirm-car", { bookingId });
       message.success("Xác nhận trả xe thành công!");
-
-      // Cập nhật UI ngay lập tức
       setBookings((prev) =>
-        prev.map((b) =>
-          b._id === bookingId ? { ...b, status: "Completed" } : b
-        )
+        prev.map((b) => (b._id === bookingId ? { ...b, status: "Completed" } : b))
       );
     } catch (error) {
       console.error("Lỗi khi xác nhận trả xe:", error);
@@ -78,36 +75,33 @@ export default function CarOrder() {
     }
   };
 
+  const showCancelModal = (bookingId: string) => {
+    setSelectedBookingId(bookingId);
+    setCancelModalVisible(true);
+  };
 
-const confirmCancelBooking = (bookingId: string) => {
-  Modal.confirm({
-    title: "Xác nhận hủy đơn đặt xe",
-    content: "Bạn có chắc muốn hủy đơn đặt xe của khách hàng này?",
-    okText: "Hủy đơn",
-    okType: "danger",
-    cancelText: "Thoát",
-    onOk: () => handleCancelBooking(bookingId),
-  });
-};
+  const handleCancelBooking = async () => {
+    if (!selectedBookingId) return;
 
-const handleCancelBooking = async (bookingId: string) => {
-  try {
-    await api.post("/booking/cancel", { bookingId });
-    message.success("Đơn đặt xe đã được hủy!");
+    try {
+      await api.post("/booking/cancel", { bookingId: selectedBookingId,reason: cancelReason, });
+      message.success("Đơn đặt xe đã được hủy!");
+      setBookings((prev) =>
+        prev.map((b) =>
+          b._id === selectedBookingId
+            ? { ...b, status: "Canceled", cancelReason }
+            : b
+        )
+      );
+    } catch (error) {
+      console.error("Lỗi khi hủy đơn đặt xe:", error);
+      message.error("Không thể hủy đơn đặt xe.");
+    } finally {
+      setCancelModalVisible(false);
+      setSelectedBookingId(null);
+    }
+  };
 
-    setBookings((prev) =>
-      prev.map((b) =>
-        b._id === bookingId ? { ...b, status: "Cancelled" } : b
-      )
-    );
-  } catch (error) {
-    console.error("Lỗi khi hủy đơn đặt xe:", error);
-    message.error("Không thể hủy đơn đặt xe.");
-  }
-};
-
-  
-  // ✅ Gắn tag trạng thái
   const getStatusTag = (status: string) => {
     switch (status) {
       case "Pending":
@@ -134,15 +128,15 @@ const handleCancelBooking = async (bookingId: string) => {
           <div className="relative w-80">
             <FiSearch className="absolute left-3 top-3 text-gray-500" />
             <input
-  type="text"
-  placeholder="Tìm theo tên, liên hệ hoặc ngày đặt xe"
-  className="pl-10 p-2 border rounded-md w-full"
-  value={searchTerm}
-  onChange={(e) => {
-    setSearchTerm(e.target.value);
-    setCurrentPage(1); // Reset về trang đầu khi tìm kiếm
-  }}
-/>
+              type="text"
+              placeholder="Tìm theo tên, liên hệ hoặc ngày đặt xe"
+              className="pl-10 p-2 border rounded-md w-full"
+              value={searchTerm}
+              onChange={(e) => {
+                setSearchTerm(e.target.value);
+                setCurrentPage(1);
+              }}
+            />
           </div>
         </div>
 
@@ -166,7 +160,7 @@ const handleCancelBooking = async (bookingId: string) => {
                   <tr key={booking._id} className="border-t hover:bg-gray-100">
                     <td className="p-3">{booking.user.personalInfo.name}</td>
                     <td className="p-3">
-                      {booking.user.phoneNumber ? booking.user.phoneNumber : booking.user.personalInfo?.email}
+                      {booking.user.phoneNumber || booking.user.personalInfo.email}
                     </td>
                     <td className="p-3 truncate">
                       {booking.car.brand} {booking.car.name}
@@ -175,13 +169,13 @@ const handleCancelBooking = async (bookingId: string) => {
                       {new Date(booking.createdAt).toLocaleDateString()}
                     </td>
                     <td className="p-3 text-center">
-                      {new Date(booking.startDate).toLocaleDateString()} -  {booking.startTime}
+                      {new Date(booking.startDate).toLocaleDateString()} - {booking.startTime}
                     </td>
                     <td className="p-3 text-center">{getStatusTag(booking.status)}</td>
                     <td className="p-3 text-center">
                       {new Date(booking.endDate).toLocaleDateString()} - {booking.endTime}
                     </td>
-                    <td className="p-3 text-center">
+                    <td className="p-3 text-center space-y-2">
                       {booking.status === "Pending Confirmation" && (
                         <Button
                           type="primary"
@@ -191,17 +185,18 @@ const handleCancelBooking = async (bookingId: string) => {
                           Xác nhận trả xe
                         </Button>
                       )}
-               {booking.status !== "Completed" && booking.status !== "Canceled" && (
-  <Button
-    type="default"
-    danger
-    icon={<FiTrash />}
-    onClick={() => confirmCancelBooking(booking._id)}
-  >
-    Hủy
-  </Button>
-)}
-
+                      {booking.status !== "Completed" && booking.status !== "Canceled" && (
+                        <Button
+                          type="default"
+                          danger
+                          icon={<FiTrash />}
+                          onClick={() => {showCancelModal(booking._id);
+                            setCancelReason("");
+                            setCancelModalVisible(true); }}
+                        >
+                          Hủy
+                        </Button>
+                      )}
                     </td>
                   </tr>
                 ))}
@@ -218,6 +213,25 @@ const handleCancelBooking = async (bookingId: string) => {
           className="mt-4 flex justify-center"
         />
       </div>
+
+      {/* 🔔 Modal xác nhận hủy */}
+      <Modal
+        title="Xác nhận hủy đơn đặt xe"
+        open={cancelModalVisible}
+        onOk={handleCancelBooking}
+        onCancel={() => setCancelModalVisible(false)}
+        okText="Hủy đơn"
+        cancelText="Thoát"
+      >
+        <p>Bạn có chắc chắn muốn hủy đơn đặt xe của khách hàng này?</p>
+        <textarea
+    value={cancelReason}
+    onChange={(e) => setCancelReason(e.target.value)}
+    className="w-full border rounded p-2 mt-2"
+    placeholder="Nhập lý do hủy đơn..."
+    rows={3}
+  />
+      </Modal>
     </div>
   );
 }

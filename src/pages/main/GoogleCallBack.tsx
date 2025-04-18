@@ -12,7 +12,7 @@ export default function GoogleAuthSuccess() {
     if (token) {
         const decodedUser = jwtDecode(token);
         console.log("Decoded User:", decodedUser);
-
+        console.log(token)
         // 🔹 Lưu token & user vào localStorage
         localStorage.setItem("token", token);
         localStorage.setItem("user", JSON.stringify(decodedUser));
