@@ -167,7 +167,7 @@ export default function PaymentManagement() {
                     <td className="p-3 text-center">
                       {new Date(payment.createdAt).toLocaleDateString()}
                     </td>
-                    <td className="p-3 text-center">
+                    {/* <td className="p-3 text-center">
                       <Dropdown
                         overlay={
                           <Menu onClick={(e) => message.info(`Click: ${e.key}`)}>
@@ -183,7 +183,7 @@ export default function PaymentManagement() {
                       >
                         <FiMoreVertical className="cursor-pointer" />
                       </Dropdown>
-                    </td>
+                    </td> */}
                   </tr>
                 ))}
               </tbody>
