@@ -185,7 +185,7 @@ export default function CarOrder() {
                           Xác nhận trả xe
                         </Button>
                       )}
-                      {booking.status !== "Completed" && booking.status !== "Canceled" && (
+                      {(booking.status === "Pending" || booking.status === "Pending Confirmation") && (
                         <Button
                           type="default"
                           danger
