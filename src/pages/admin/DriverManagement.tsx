@@ -91,7 +91,7 @@ export default function DriverManagement() {
                                                 : "Không có xe"}
                                         </td>
                                         <td className="p-3 text-center">{driver.ownerInfo.ratings}/5 ⭐</td>
-                                        <td className="p-3 text-center">
+                                        {/* <td className="p-3 text-center">
                                             <Dropdown
                                                 overlay={
                                                     <Menu onClick={handleMenuClick}>
@@ -103,7 +103,7 @@ export default function DriverManagement() {
                                             >
                                                 <FiMoreVertical className="cursor-pointer" />
                                             </Dropdown>
-                                        </td>
+                                        </td> */}
                                     </tr>
                                 ))}
                             </tbody>
