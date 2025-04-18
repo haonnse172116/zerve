@@ -4,7 +4,7 @@ import { FiEdit, FiTrash, FiSearch, FiMoreVertical, FiCheckCircle } from "react-
 import { Card, CardContent } from "../../components/card/card";
 import { Tag } from "antd";
 import api from "../../api";
-
+import { Modal } from "antd";
 interface Booking {
   _id: string;
   user: {
@@ -78,6 +78,35 @@ export default function CarOrder() {
     }
   };
 
+
+const confirmCancelBooking = (bookingId: string) => {
+  Modal.confirm({
+    title: "Xác nhận hủy đơn đặt xe",
+    content: "Bạn có chắc muốn hủy đơn đặt xe của khách hàng này?",
+    okText: "Hủy đơn",
+    okType: "danger",
+    cancelText: "Thoát",
+    onOk: () => handleCancelBooking(bookingId),
+  });
+};
+
+const handleCancelBooking = async (bookingId: string) => {
+  try {
+    await api.post("/booking/cancel", { bookingId });
+    message.success("Đơn đặt xe đã được hủy!");
+
+    setBookings((prev) =>
+      prev.map((b) =>
+        b._id === bookingId ? { ...b, status: "Cancelled" } : b
+      )
+    );
+  } catch (error) {
+    console.error("Lỗi khi hủy đơn đặt xe:", error);
+    message.error("Không thể hủy đơn đặt xe.");
+  }
+};
+
+  
   // ✅ Gắn tag trạng thái
   const getStatusTag = (status: string) => {
     switch (status) {
@@ -89,8 +118,10 @@ export default function CarOrder() {
         return <Tag color="yellow">Chờ xác nhận trả xe</Tag>;
       case "Completed":
         return <Tag color="green">Hoàn thành</Tag>;
+      case "Canceled":
+        return <Tag color="red">Đã hủy</Tag>;
       default:
-        return <Tag color="red">Không xác định</Tag>;
+        return <Tag color="silver">Không xác định</Tag>;
     }
   };
 
@@ -160,21 +191,17 @@ export default function CarOrder() {
                           Xác nhận trả xe
                         </Button>
                       )}
-                      {/* <Dropdown
-                        overlay={
-                          <Menu>
-                            <Menu.Item key="edit" icon={<FiEdit />}>
-                              Cập nhật
-                            </Menu.Item>
-                            <Menu.Item key="delete" icon={<FiTrash />} danger>
-                              Xóa
-                            </Menu.Item>
-                          </Menu>
-                        }
-                        trigger={["click"]}
-                      >
-                        <FiMoreVertical className="cursor-pointer ml-2" />
-                      </Dropdown> */}
+               {booking.status !== "Completed" && booking.status !== "Canceled" && (
+  <Button
+    type="default"
+    danger
+    icon={<FiTrash />}
+    onClick={() => confirmCancelBooking(booking._id)}
+  >
+    Hủy
+  </Button>
+)}
+
                     </td>
                   </tr>
                 ))}
