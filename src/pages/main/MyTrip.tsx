@@ -16,6 +16,7 @@ interface Booking {
   startTime: string;
   endTime: string;
   status: string;
+  cancelReason: string | null;
 }
 
 export default function MyTrips() {
@@ -92,8 +93,7 @@ export default function MyTrips() {
                     {new Date(booking.endDate).toLocaleDateString()}
                   </p>
                   <p className="text-sm text-gray-600">
-                    Thời gian thuê: {booking.startTime} -{" "}
-                    {booking.endTime}
+                    Thời gian thuê: {booking.startTime} - {booking.endTime}
                   </p>
                   <p
                     className={`text-sm font-semibold ${
@@ -103,17 +103,27 @@ export default function MyTrips() {
                         ? "text-blue-600"
                         : booking.status === "Pending Confirmation"
                         ? "text-yellow-600"
+                        : booking.status === "Canceled"
+                        ? "text-red-600"
                         : "text-gray-600"
                     }`}
                   >
-                     Trạng thái:{" "}
-  {{
-    "Completed": "Hoàn tất",
-    "Confirmed": "Đã xác nhận",
-    "Pending Confirmation": "Chờ xác nhận trả xe",
-    "Pending": "Chờ xác nhận",
-  }[booking.status] || "Không xác định"}
+                    Trạng thái:{" "}
+                    {{
+                      "Completed": "Hoàn tất",
+                      "Confirmed": "Đã xác nhận",
+                      "Pending Confirmation": "Chờ xác nhận trả xe",
+                      "Pending": "Chờ xác nhận",
+                      "Canceled": "Đã hủy",
+                    }[booking.status] || "Không xác định"}
                   </p>
+
+                  {/* ✅ Hiển thị lý do hủy nếu có */}
+                  {booking.status === "Canceled" && booking.cancelReason && (
+                    <p className="text-sm text-red-500 italic mt-1">
+                      Lý do hủy: {booking.cancelReason}
+                    </p>
+                  )}
                 </div>
               </div>
 
