@@ -7,42 +7,41 @@ import { useAuth } from "../../components/context/AuthContext";
 import { Button, message } from "antd";
 
 export default function LoginPage() {
-  const { login } = useAuth(); 
+  const { login } = useAuth();
   const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
   const [loading, setLoading] = useState(false);
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
   const [errorMessage, setErrorMessage] = useState("");
 
   // 🔹 Xử lý đăng nhập bằng số điện thoại
   const handleLogin = async () => {
     setLoading(true);
-    setErrorMessage(""); 
+    setErrorMessage("");
     try {
-      const response = await api.post("/user/login", { 
+      const response = await api.post("/user/login", {
         phoneNumber: phone,
-        password
+        password,
       });
 
-      const {token, user} = response.data;
+      const { token, user } = response.data;
 
       if (token && user) {
         localStorage.setItem("token", token);
-        localStorage.setItem("role", user.role); 
-        console.log("role:", user.role);
-        login(user, token); 
+        localStorage.setItem("role", user.role);
+        login(user, token);
         if (user.role === "admin") {
           navigate("/admin/dashboard"); // Chuyển hướng tới trang Dashboard của admin
-      } else {
+        } else {
           navigate("/"); // Chuyển hướng trang chủ với role khác
-      }
+        }
       }
     } catch (error) {
       setLoading(false);
       if (axios.isAxiosError(error)) {
         const errorMsg = error.response?.data?.message || "Đăng nhập thất bại.";
-        setErrorMessage(errorMsg); 
+        setErrorMessage(errorMsg);
       } else {
         setErrorMessage("Có lỗi xảy ra, vui lòng thử lại.");
       }
@@ -55,83 +54,102 @@ export default function LoginPage() {
   const handleGoogleLogin = async () => {
     window.location.href = "https://backend-rentalcar.onrender.com/user/google";
   };
-  return (
-    <div className="flex h-screen">
-      {/* Left Side: Login Form */}
-      <div className="w-1/2 flex items-center justify-center p-10">
-        <Link to="/">
-        <img src="/Logo.png" alt="Rent Connect" className="absolute top-2 left-5 w-32" />
-        </Link>
-        <div className="max-w-screen-md w-full">
-          <h1 className="text-3xl font-bold">Đăng nhập</h1>
-          <p className="mt-2 text-gray-600">
-            Chưa có tài khoản? <span className="text-blue-600 font-semibold cursor-pointer"
-            onClick={() => navigate("/register")} >Đăng ký ngay!</span>
-          </p>
-          
-          <div className="mt-6">
-            <label className="block text-gray-700">Số điện thoại</label>
-            <input
-              type="text"
-              className="w-full mt-1 p-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
-              placeholder="Nhập số điện thoại của bạn"
-              value={phone}
-              onChange={(e) => setPhone(e.target.value)}
-            />
-          </div>
-          
-          <div className="mt-4">
-            <label className="block text-gray-700">Mật khẩu</label>
-            <input
-              type="password"
-              className="w-full mt-1 p-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
-              placeholder="Nhập mật khẩu"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-          </div>
-          
-          <div className="flex items-center justify-between mt-4">
-            <label className="flex items-center text-gray-600">
-              <input
-                type="checkbox"
-                className="mr-2"
-                checked={rememberMe}
-                onChange={() => setRememberMe(!rememberMe)}
-              />
-              Ghi nhớ đăng nhập
-            </label>
-            <a href="#" className="text-blue-600">Quên mật khẩu?</a>
-          </div>
-          
-          {errorMessage && (
-            <p className="text-red-500 text-sm mt-2">{errorMessage}</p>
-          )}
 
-          <button 
-            className="w-full mt-6 bg-orange-500 text-white py-3 rounded-md hover:bg-orange-600"
-            onClick={handleLogin}
-            disabled={loading}
-          >
-            {loading ? "Đang đăng nhập..." : "Đăng nhập"}
-          </button>
-          
-          <p className="text-center mt-6 text-gray-600">hoặc tiếp tục với</p>
-          
-          <div onClick={handleGoogleLogin} className="flex justify-center items-center mt-4 space-x-2 cursor-pointer">
-  <FaGoogle className="text-red-500 text-2xl" />
-  <span>Google</span>
+  return (
+    <div className="flex flex-col md:flex-row h-screen">
+      {/* Left Side: Login Form */}
+      <div className="relative w-full md:w-1/2 flex items-center justify-center p-6 md:p-10">
+  <Link to="/">
+    <img
+      src="/Logo.png"
+      alt="Rent Connect"
+      className="absolute top-5 left-5 w-32 md:w-40 z-10" // Logo stays on top without overlap
+    />
+  </Link>
+  <div className="max-w-screen-sm w-full mt-16"> {/* Add top margin to form */}
+    <h1 className="text-3xl font-bold">Đăng nhập</h1>
+    <p className="mt-2 text-gray-600">
+      Chưa có tài khoản?{" "}
+      <span
+        className="text-blue-600 font-semibold cursor-pointer"
+        onClick={() => navigate("/register")}
+      >
+        Đăng ký ngay!
+      </span>
+    </p>
+
+    <div className="mt-6">
+      <label className="block text-gray-700">Số điện thoại</label>
+      <input
+        type="text"
+        className="w-full mt-1 p-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
+        placeholder="Nhập số điện thoại của bạn"
+        value={phone}
+        onChange={(e) => setPhone(e.target.value)}
+      />
+    </div>
+
+    <div className="mt-4">
+      <label className="block text-gray-700">Mật khẩu</label>
+      <input
+        type="password"
+        className="w-full mt-1 p-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
+        placeholder="Nhập mật khẩu"
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+      />
+    </div>
+
+    <div className="flex items-center justify-between mt-4">
+      <label className="flex items-center text-gray-600">
+        <input
+          type="checkbox"
+          className="mr-2"
+          checked={rememberMe}
+          onChange={() => setRememberMe(!rememberMe)}
+        />
+        Ghi nhớ đăng nhập
+      </label>
+      <a href="#" className="text-blue-600">
+        Quên mật khẩu?
+      </a>
+    </div>
+
+    {errorMessage && (
+      <p className="text-red-500 text-sm mt-2">{errorMessage}</p>
+    )}
+
+    <button
+      className="w-full mt-6 bg-orange-500 text-white py-3 rounded-md hover:bg-orange-600"
+      onClick={handleLogin}
+      disabled={loading}
+    >
+      {loading ? "Đang đăng nhập..." : "Đăng nhập"}
+    </button>
+
+    <p className="text-center mt-6 text-gray-600">hoặc tiếp tục với</p>
+
+    <div
+  onClick={handleGoogleLogin}
+  className="flex justify-center items-center mt-4 space-x-2 cursor-pointer bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700"
+>
+  <FaGoogle className="text-white text-2xl" />
+  <span className="text-white">Google</span>
 </div>
-        </div>
-      </div>
-      
+
+  </div>
+</div>
+
+
       {/* Right Side: Full-Screen Image */}
-      <div className="w-1/2 h-screen">
+      <div className="w-full md:w-1/2 h-screen">
         <img
           src="/Pic1.jpeg"
           className="w-full h-full object-cover"
+          alt="Background"
         />
       </div>
     </div>
   );
 }
+

@@ -1,8 +1,9 @@
 import { useState } from "react";
-import { FaFacebook, FaGoogle } from "react-icons/fa";
+import { FaGoogle } from "react-icons/fa";
 import axios, { AxiosError } from "axios";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import api from "../../api";
+
 export default function RegisterPage() {
   const [phone, setPhone] = useState("");
   const [username, setUsername] = useState("");
@@ -11,6 +12,7 @@ export default function RegisterPage() {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
   const navigate = useNavigate();
+
   const handleRegister = async () => {
     setMessage("");
     if (!phone || !username || !password || !confirmPassword) {
@@ -43,21 +45,34 @@ export default function RegisterPage() {
       setLoading(false);
     }
   };
+
   const handleGoogleLogin = async () => {
     window.location.href = "https://backend-rentalcar.onrender.com/user/google";
   };
+
   return (
-    <div className="flex h-screen">
+    <div className="flex flex-col md:flex-row h-screen">
       {/* Left Side: Register Form */}
-      <div className="w-1/2 flex items-center justify-center p-10">
-        <img src="/Logo.png" alt="Rent Connect" className="absolute top-2 left-5 w-32" />
-        <div className="max-w-screen-md w-full">
+      <div className="relative w-full md:w-1/2 flex items-center justify-center p-6 md:p-10">
+        <Link to="/">
+          <img
+            src="/Logo.png"
+            alt="Rent Connect"
+            className="absolute top-4 left-5 w-32 md:w-40 z-10"
+          />
+        </Link>
+        <div className="max-w-screen-sm w-full mt-16">
           <h1 className="text-3xl font-bold">Đăng ký</h1>
           <p className="mt-2 text-gray-600">
-            Đã có tài khoản? <span className="text-blue-600 font-semibold"
-            onClick={() => navigate("/login")} >Đăng nhập ngay!</span>
+            Đã có tài khoản?{" "}
+            <span
+              className="text-blue-600 font-semibold cursor-pointer"
+              onClick={() => navigate("/login")}
+            >
+              Đăng nhập ngay!
+            </span>
           </p>
-          
+
           <div className="mt-6">
             <label className="block text-gray-700">Số điện thoại</label>
             <input
@@ -68,7 +83,7 @@ export default function RegisterPage() {
               onChange={(e) => setPhone(e.target.value)}
             />
           </div>
-          
+
           <div className="mt-4">
             <label className="block text-gray-700">Tên người dùng</label>
             <input
@@ -79,7 +94,7 @@ export default function RegisterPage() {
               onChange={(e) => setUsername(e.target.value)}
             />
           </div>
-          
+
           <div className="mt-4">
             <label className="block text-gray-700">Mật khẩu</label>
             <input
@@ -90,7 +105,7 @@ export default function RegisterPage() {
               onChange={(e) => setPassword(e.target.value)}
             />
           </div>
-          
+
           <div className="mt-4">
             <label className="block text-gray-700">Xác nhận mật khẩu</label>
             <input
@@ -101,27 +116,38 @@ export default function RegisterPage() {
               onChange={(e) => setConfirmPassword(e.target.value)}
             />
           </div>
-          
-          <button className="w-full mt-6 bg-orange-500 text-white py-3 rounded-md hover:bg-orange-600"
-          onClick={handleRegister}
-          disabled={loading}>
-            Đăng ký
+
+          {message && (
+            <p className="text-red-500 text-sm mt-2">{message}</p>
+          )}
+
+          <button
+            className="w-full mt-6 bg-orange-500 text-white py-3 rounded-md hover:bg-orange-600"
+            onClick={handleRegister}
+            disabled={loading}
+          >
+            {loading ? "Đang đăng ký..." : "Đăng ký"}
           </button>
-          
+
           <p className="text-center mt-6 text-gray-600">hoặc tiếp tục với</p>
-          
-          <div onClick={handleGoogleLogin} className="flex justify-center items-center mt-4 space-x-2 cursor-pointer">
-  <FaGoogle className="text-red-500 text-2xl" />
-  <span>Google</span>
+
+          <div
+  onClick={handleGoogleLogin}
+  className="flex justify-center items-center mt-4 space-x-2 cursor-pointer bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700"
+>
+  <FaGoogle className="text-white text-2xl" />
+  <span className="text-white">Google</span>
 </div>
+
         </div>
       </div>
-      
+
       {/* Right Side: Image */}
-      <div className="w-1/2">
+      <div className="w-full md:w-1/2">
         <img
           src="/Pic1.jpeg"
           className="w-full h-full object-cover"
+          alt="Background"
         />
       </div>
     </div>
