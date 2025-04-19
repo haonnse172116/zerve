@@ -82,7 +82,7 @@ const Booking = () => {
       };
 
       const response = await api.post("/booking/create", bookingData);
-     const { bookingId, amount } = response.data;
+      const { bookingId, amount } = response.data;
       message.success("Đặt xe thành công!");
       navigate(`/checkout/${bookingId}`, { state: { bookingId, amount } });
     } catch (error) {
@@ -108,19 +108,19 @@ const Booking = () => {
 
       <Card className="mt-4 shadow-md p-4">
         <h3 className="text-lg font-semibold">Thông tin đặt xe</h3>
-        <div className="mt-2 grid grid-cols-2 gap-4">
+        <div className="mt-2 grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
             <p className="text-gray-500 text-sm">Người đặt:</p>
             <p className="font-semibold">{user.name}</p>
           </div>
           <div>
-  <p className="text-gray-500 text-sm">
-    {user.phoneNumber ? "SĐT:" : "Email:"}
-  </p>
-  <p className="font-semibold">
-    {user.phoneNumber ? user.phoneNumber : user.email}
-  </p>
-</div>
+            <p className="text-gray-500 text-sm">
+              {user.phoneNumber ? "SĐT:" : "Email:"}
+            </p>
+            <p className="font-semibold">
+              {user.phoneNumber ? user.phoneNumber : user.email}
+            </p>
+          </div>
           <div>
             <p className="text-gray-500 text-sm">Bắt đầu:</p>
             <p className="font-semibold">{searchData.startDate} - {searchData.startTime}</p>
