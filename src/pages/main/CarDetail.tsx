@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Card, CardContent } from "../../components/card/card";
-import { Button, message } from "antd"; // ✅ Thêm message từ Antd để hiển thị thông báo
+import { Button, message, Modal } from "antd"; // ✅ Thêm Modal từ Antd
 import { FaGasPump, FaCogs, FaUser, FaMapMarkerAlt, FaTag, FaRoad } from "react-icons/fa";
 import { MdGpsFixed, MdUsb } from "react-icons/md";
 import { AiOutlineBook } from "react-icons/ai";
@@ -18,6 +18,8 @@ const CarRentalListing = () => {
   const user  = useAuth();
   const [car, setCar] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+  const [isModalVisible, setIsModalVisible] = useState(false); // State cho modal ảnh
+  const [selectedImage, setSelectedImage] = useState<string>("");
 
   useEffect(() => {
     const fetchCarDetail = async () => {
@@ -39,8 +41,18 @@ const CarRentalListing = () => {
       message.warning("Vui lòng đăng nhập hoặc tạo tài khoản để đặt xe!");
       navigate("/login");
       return;
-    }else navigate(`/booking/${carId}`)
+    }else navigate(`/booking/${carId}`);
+  };
 
+  // Mở modal với ảnh được chọn
+  const handleImageClick = (image: string) => {
+    setSelectedImage(image);
+    setIsModalVisible(true);
+  };
+
+  // Đóng modal
+  const handleModalClose = () => {
+    setIsModalVisible(false);
   };
 
   if (loading) return <p>Loading...</p>;
@@ -58,6 +70,7 @@ const CarRentalListing = () => {
                 src={img}
                 alt={`Car Image ${index}`}
                 className={`w-full object-cover ${index === 0 ? "h-72 col-span-2" : "h-36"}`}
+                onClick={() => handleImageClick(img)} // Thêm sự kiện click vào ảnh
               />
             ))}
           </div>
@@ -133,6 +146,16 @@ const CarRentalListing = () => {
           </Button>
         </Card>
       </div>
+
+      {/* Modal để xem ảnh */}
+      <Modal
+        title="Xem ảnh xe"
+        visible={isModalVisible}
+        onCancel={handleModalClose}
+        footer={null}
+      >
+        <img src={selectedImage} alt="Full Car Image" className="w-full h-auto" />
+      </Modal>
     </div>
   );
 };

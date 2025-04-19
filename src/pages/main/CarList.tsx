@@ -116,29 +116,29 @@ const SearchFilterCarList = () => {
         ) : filteredCars.length > 0 ? (
           filteredCars.map((car) => (
             <div
-              key={car._id}
-              onClick={() => navigate(`/car-detail/${car._id}`)}
-              className="bg-white rounded-xl shadow-lg overflow-hidden"
-            >
-              <img
-                src={car.images?.[0]}
-                alt="Car Image"
-                className="w-full h-64 object-cover cursor-pointer"
-               
-              />
-              <div className="p-4">
-                <h3 className="text-lg font-semibold">{car.name}</h3>
-                <p className="text-gray-500 text-sm">{car.location}</p>
-                <div className="mt-2 flex justify-between items-center">
-                  <span className="text-red-500 font-semibold">
-                    {car.pricePerDay.toLocaleString()}đ/ngày
-                  </span>
-                  <span className="text-gray-500 text-sm">
-                    {car.pricePerHour.toLocaleString()}đ/giờ
-                  </span>
-                </div>
-              </div>
-            </div>
+  key={car._id}
+  onClick={() => navigate(`/car-detail/${car._id}`)}
+  className="bg-white rounded-xl shadow-lg overflow-hidden transition-transform duration-300 transform hover:scale-105"
+>
+  <img
+    src={car.images?.[0]}
+    alt="Car Image"
+    className="w-full h-64 object-cover cursor-pointer"
+  />
+  <div className="p-4">
+    <h3 className="text-lg font-semibold">{car.name}</h3>
+    <p className="text-gray-500 text-sm">{car.location}</p>
+    <div className="mt-2 flex justify-between items-center">
+      <span className="text-red-500 font-semibold">
+        {car.pricePerDay.toLocaleString()}đ/ngày
+      </span>
+      <span className="text-gray-500 text-sm">
+        {car.pricePerHour.toLocaleString()}đ/giờ
+      </span>
+    </div>
+  </div>
+</div>
+
           ))
         ) : (
           <p className="text-center text-gray-600 mt-6">
